@@ -1,0 +1,140 @@
+<div class="login-body">
+  <div class="login-container text-center">
+    <div class="mb-4" *ngIf="!cadastrando">
+      <i class="bi bi-geo-alt logo"></i>
+      <div class="title">MapeiaProduto</div>
+    </div>
+
+    <div *ngIf="mensagemSucesso" class="alert alert-success">
+      {{ mensagemSucesso }}
+    </div>
+
+    <!-- <div *ngFor="let erro of errors" class="alert alert-danger">
+      {{ erro }}
+    </div> -->
+
+    <!-- <div *ngIf="loginError" class="alert alert-danger">
+      Login e/ou Senha incorreto(a).
+    </div> -->
+
+    <div *ngIf="loginError" class="alert alert-danger">
+      Dados inválidos ou campo(s) vazio(s) existente(s).
+    </div>
+   
+    <h3>{{ cadastrando ? "Cadastro de nova conta" : "" }}</h3>
+
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+      <!-- Nome (Cadastro) -->
+      <div class="mb-4 text-start" *ngIf="cadastrando">
+        <label for="nomeUsuario" class="form-label">Nome:</label>
+        <input
+          type="text"
+          name="nomeUsuario"
+          id="nomeUsuario"
+          [(ngModel)]="nomeUsuario"
+          class="form-control"
+          placeholder="Digite seu nome"
+        />
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3 text-start">
+        <label for="email" class="form-label">Email:</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          [(ngModel)]="email" autocomplete="off"
+          class="form-control"
+          placeholder="Digite o seu e-mail"
+        />
+      </div>
+
+      <!-- Telefone (Cadastro) -->
+      <div class="mb-4 text-start" *ngIf="cadastrando">
+        <label for="telefone" class="form-label">Telefone:</label>
+        <input
+          type="tel"
+          name="telefone"
+          id="telefone"
+          [(ngModel)]="telefone"
+          class="form-control"
+          placeholder="Digite seu telefone"
+        />
+      </div>
+
+      <!-- Tipo de conta (Cadastro) -->
+      <div class="mb-3" *ngIf="cadastrando">
+        <label class="form-label d-block mb-2">Tipo de conta</label>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="tipoPermissao"
+            id="produtor"
+            value="Produtor"
+            [(ngModel)]="tipoPermissao"
+          />
+          <label class="form-check-label" for="produtor">Produtor</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="tipoPermissao"
+            id="consumidor"
+            value="Consumidor"
+            [(ngModel)]="tipoPermissao"
+          />
+          <label class="form-check-label" for="consumidor">Consumidor</label>
+        </div>
+      </div>
+
+      <!-- Senha -->
+      <div class="mb-4 text-start">
+        <label for="senha" class="form-label">Senha:</label>
+        <input
+          type="password"
+          name="senha"
+          id="senha"
+          [(ngModel)]="senha"
+          class="form-control"
+          placeholder="Digite a sua senha"
+        />
+      </div>
+
+      <!-- Botões -->
+      <button *ngIf="!cadastrando" type="submit" class="btn btn-custom w-100">
+        Entrar
+      </button>
+
+      <div class="d-flex gap-4" *ngIf="cadastrando">
+        <button
+          type="button"
+          (click)="cancelaCadastro()"
+          class="btn btn-danger rounded-pill flex-fill"
+        >
+          Cancelar
+        </button>
+        <button type="button" (click)="cadastrar()" class="btn btn-custom flex-fill">
+          Cadastrar
+        </button>
+      </div>
+
+      <!-- <input type="hidden" name="ativo" [(ngModel)]="ativo" value="S" /> -->
+
+    </form>
+
+    <!-- Link para alternar -->
+    <div *ngIf="!cadastrando">
+      <small>
+        Não possui conta?
+        <a href="#" (click)="preparaCadastrar($event)">Cadastre-se</a>
+      </small>
+      <br />
+      <a routerLink="/mapa-produtos-externos" class="text-primary"
+        >Visualizar mapa dos produtos disponíveis</a
+      >
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<br />
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Associação &gt; Visualizar Associações</li>
+</ol>
+
+<div class="container pb-4">
+  <!-- Campo de Busca -->
+  <div class="d-flex mb-4">
+    <input
+      type="text"
+      class="form-control rounded-pill border border-dark me-2"
+      placeholder="Digite Algo..."
+      name="busca"
+    />
+    <button class="btn btn-outline-dark rounded-pill px-4 btn-search" type="button">
+      <i class="bi bi-search"></i>
+    </button>
+  </div>
+
+  <!-- Associações Ativas -->
+  <div class="mb-4 border">
+    <div class="tabela-header-cinza text-white px-3 py-2 fw-bold">
+      Associações de produtos e estabelecimentos
+    </div>
+    <div class="list-group">
+      <div class="list-group-item d-flex justify-content-between align-items-center">
+        <!-- Lado esquerdo: Estabelecimento ↔ Produto -->
+        <div class="d-flex align-items-center">
+          <span>Queijaria Central</span>
+          <i class="bi bi-arrow-left-right mx-2"></i>
+          <span>Geléias da Serra</span>
+        </div>
+
+        <!-- Lado direito: Ações -->
+        <div>
+          <button
+            class="btn btn-link text-dark"
+            title="Editar"
+          >
+            <i class="bi bi-pencil fs-5"></i>
+          </button>
+          <button
+            class="btn btn-link text-dark"
+            title="Excluir"
+          >
+            <i class="bi bi-trash fs-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

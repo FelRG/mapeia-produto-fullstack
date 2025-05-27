@@ -1,0 +1,113 @@
+<br>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Produto &gt; Visualizar Produtos</li>
+</ol>
+
+<div class="container pb-4">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-success" role="alert" *ngIf="mensagemSucesso">
+        {{ mensagemSucesso }}
+      </div>
+      <div class="alert alert-danger" role="alert" *ngIf="mensagemErro">
+        {{ mensagemErro }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Campo de Busca -->
+  <!-- <div class="d-flex mb-4">
+  <input
+    type="text"
+    class="form-control rounded-pill border border-dark me-2"
+    placeholder="Digite Algo..."
+  />
+  <button class="btn btn-outline-dark rounded-pill px-4 btn-search" type="button">
+    <i class="bi bi-search"></i>
+  </button>
+</div> -->
+
+<!-- Campo de Busca com estilo moderno e funcionalidades Angular -->
+<form #consultaForm="ngForm" (submit)="consultar()" class="mb-4">
+  <div class="d-flex">
+    <input
+      type="text"
+      [(ngModel)]="q"
+      name="q"
+      id="inputq"
+      class="form-control rounded-pill border border-dark me-2"
+      placeholder="Digite o nome do produto..."
+    />
+    <button type="submit" class="btn btn-outline-dark rounded-pill px-4 btn-search">
+      <i class="bi bi-search"></i>
+    </button>
+  </div>
+</form>
+
+<div>
+    <div class="alert alert-warning" role="alert" *ngIf="messagemErroBusca">
+      {{ messagemErroBusca }}
+    </div>
+</div>
+
+  <!-- Produtos Ativos -->
+<div class="mb-4 border">
+  <div class="tabela-header-cinza text-white px-3 py-2 fw-bold">
+    Produtos
+  </div>
+  <div class="list-group">
+    <div
+      class="list-group-item d-flex justify-content-between align-items-center"
+      *ngFor="let produto of produtos"
+    >
+      {{ produto.nomeProduto }}
+      <div>
+        <button
+          class="btn btn-link text-dark me-2"
+          routerLink="/produtos/form/{{ produto.id }}"
+          title="Editar"
+        >
+          <i class="bi bi-pencil fs-5"></i>
+        </button>
+        <button
+          class="btn btn-link text-dark"
+          (click)="preparaDelecao(produto)"
+          title="Excluir"
+          data-bs-toggle="modal"
+          data-bs-target="#modalDelecao"
+        >
+          <i class="bi bi-trash fs-5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="modalDelecao" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Confirmação</h4>
+      </div>
+      <div class="modal-body" *ngIf="produtoSelecionado">
+        Confirma a deleção do produto <strong>{{ produtoSelecionado.nomeProduto }}</strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="deletarProduto()"
+          data-bs-dismiss="modal"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
