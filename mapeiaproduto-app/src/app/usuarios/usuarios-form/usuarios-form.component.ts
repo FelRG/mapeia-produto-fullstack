@@ -14,6 +14,10 @@ export class UsuariosFormComponent implements OnInit {
   sucess: boolean = false;
   // errors: String[];
   id!: number;
+  isAdmin?: boolean;
+  IdContaAtualNaEdicao!: boolean;
+  contaAtualPermissao: string = localStorage.getItem('tipoPermissao') || '';
+  contaAtualId: number = Number(localStorage.getItem('id')) || 0;
 
   constructor(
     private service: UsuariosService,
@@ -57,15 +61,28 @@ export class UsuariosFormComponent implements OnInit {
       if (params && params['id']) {
         this.id = params['id'];
         this.service.getUsuarioById(this.id).subscribe(
-          (response) => (this.usuario = response),
-          (errorResponse) => (this.usuario = new Usuario())
+          (response) => {
+            this.usuario = response;
+            this.isAdmin = this.contaAtualPermissao === 'Admin';
+            this.IdContaAtualNaEdicao = this.contaAtualId === Number(this.id);
+            console.log(this.contaAtualId, this.id);
+          },
+          (errorResponse) => {
+            this.usuario = new Usuario();
+            this.isAdmin = false;
+          }
         );
       }
     });
   }
 
   voltarParaListagem() {
-    this.router.navigate(['/usuarios/lista']);
+    // Verifica se o usuário é admin ou não
+    if (this.isAdmin && !this.IdContaAtualNaEdicao) {
+      this.router.navigate(['/usuarios/lista']);
+    } else {
+      this.router.navigate(['/home']);
+    }
   }
 
   onSubmit() {

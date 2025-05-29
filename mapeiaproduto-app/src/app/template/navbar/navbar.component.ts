@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth.service';
 import { Usuario } from 'src/app/usuarios/usuario';
+import { UsuariosService } from '../../usuarios.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +16,15 @@ export class NavbarComponent implements OnInit {
   isAdmin?: boolean;
   isExterno?: boolean;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  usuarioSelecionado!: Usuario;
+  mensagemSucesso!: string;
+  mensagemErro!: string;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private service: UsuariosService
+  ) { }
 
   ngOnInit(): void {
     // this.usuarioLogado = this.authService.getUsuarioAutenticado();
@@ -47,5 +56,52 @@ export class NavbarComponent implements OnInit {
   logout() {
     this.authService.encerrarSessao();
     this.router.navigate(['/login']);
+  }
+
+  preparaDelecao(usuarioid: number | undefined) {
+    if (usuarioid === undefined) {
+      this.mensagemErro = 'Usuário não selecionado para exclusão.';
+      alert(this.mensagemErro);
+      return;
+    }
+    this.usuarioSelecionado = {
+      id: usuarioid!,
+      nomeUsuario: '',
+      email: '',
+      telefone: '',
+      senha: '',
+      tipoPermissao: '',
+      ativo: '',
+      datacadastro: ''
+    };
+  }
+
+  removerFoco() {
+  setTimeout(() => {
+    const el = document.activeElement as HTMLElement;
+    if (el) el.blur();
+  });
+}
+
+
+  deletarUsuario() {
+    this.service.deletar(this.usuarioSelecionado).subscribe(
+      response => {
+        this.mensagemSucesso = 'Você excluiu sua conta com sucesso!';
+        this.logout();
+        alert(this.mensagemSucesso);
+      },
+      erro => {
+        this.mensagemErro = 'Ocorreu um erro ao deletar a sua conta.'
+        alert(this.mensagemErro);
+      }
+    )
+
+    // Remove o foco para evitar warning de acessibilidade
+    setTimeout(() => {
+      const el = document.activeElement as HTMLElement;
+      if (el) el.blur();
+    });
+
   }
 }

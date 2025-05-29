@@ -20,7 +20,7 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" routerLink="/produtos/form">Cadastrar Produto</a></li>
               <li><a class="dropdown-item" routerLink="/produtos">Visualizar Produtos</a></li>
-              <li *ngIf="isAdmin"><a class="dropdown-item" href="#">Validar Produtos</a></li>
+              <!-- <li *ngIf="isAdmin"><a class="dropdown-item" href="#">Validar Produtos</a></li> -->
             </ul>
           </li>
 
@@ -30,7 +30,7 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" routerLink="/estabelecimentos/form">Cadastrar Estabelecimento</a></li>
               <li><a class="dropdown-item" routerLink="/estabelecimentos">Visualizar Estabelecimentos</a></li>
-              <li *ngIf="isAdmin"><a class="dropdown-item" href="#">Validar Estabelecimentos</a></li>
+              <!-- <li *ngIf="isAdmin"><a class="dropdown-item" href="#">Validar Estabelecimentos</a></li> -->
             </ul>
           </li>
 
@@ -40,7 +40,7 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" routerLink="/associacoes/form">Cadastrar Associação</a></li>
               <li><a class="dropdown-item" routerLink="/associacoes">Visualizar Associações</a></li>
-              <li *ngIf="isAdmin"><a class="dropdown-item" href="#">Validar Associações</a></li>
+              <!-- <li *ngIf="isAdmin"><a class="dropdown-item" href="#">Validar Associações</a></li> -->
             </ul>
           </li>
           <li class="nav-item mx-2" *ngIf="isExterno">
@@ -59,9 +59,9 @@
               <i class="bi bi-person fs-3"></i><br>
               <strong>{{ usuarioLogado }} ({{ permissao }})</strong>
             </div>
-            <a class="dropdown-item" href="#">Alterar Dados Pessoais</a>
+            <a class="dropdown-item" routerLink="/usuarios/form/{{ idusuario }}">Alterar Dados Pessoais</a>
             <a *ngIf="isAdmin" class="dropdown-item" routerLink="/usuarios">Gerenciar Usuários</a>
-            <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#modalExclusaoConta">Excluir Conta</a>
+            <a class="dropdown-item text-danger" href="#" (click)="preparaDelecao(idusuario)" data-bs-toggle="modal" data-bs-target="#modalExclusaoConta">Excluir Conta</a>
             <a class="dropdown-item text-danger" (click)="logout()" href="#">Sair</a>
           </div>
         </div>
@@ -76,14 +76,14 @@
         <h5 class="modal-title" id="modalExclusaoContaLabel">Excluir Conta</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" *ngIf="usuarioSelecionado">
         Tem certeza de que deseja <strong>excluir permanentemente</strong> sua conta?
         <br />
         Esta ação não poderá ser desfeita.
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="removerFoco()">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deletarUsuario()">
           Confirmar Exclusão
         </button>
       </div>

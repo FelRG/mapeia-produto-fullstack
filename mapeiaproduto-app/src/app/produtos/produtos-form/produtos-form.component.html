@@ -1,10 +1,12 @@
 <br />
 <ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">
   Produto &gt;
   {{
-    produto.id ? "Editar" : "Cadastrar"
+  produto.id ? "Editar" : "Cadastrar"
   }}
   Produto
+  </li>
 </ol>
 
 <div class="container pb-4">
@@ -27,104 +29,66 @@
 
     <div class="row">
       <div class="col-md-12">
-        <div
-          class="alert alert-danger"
-          role="alert"
-          *ngIf="erroUsuarioInvalido"
-        >
+        <div class="alert alert-danger" role="alert" *ngIf="erroUsuarioInvalido">
           Erro: usuário inválido.
         </div>
       </div>
     </div>
 
     <!-- ID -->
-    <div class="mb-3" *ngIf="produto.id">
+    <!-- <div class="mb-3" *ngIf="produto.id">
       <label for="id" class="form-label">ID</label>
-      <input
-        type="text"
-        id="id"
-        class="form-control rounded-pill border border-dark"
-        name="id"
-        [ngModel]="produto.id"
-        disabled
-      />
-    </div>
+      <input type="text" id="id" class="form-control rounded-pill border border-dark" name="id" [ngModel]="produto.id"
+        disabled />
+    </div> -->
     <!-- Data de Cadastro -->
-    <div class="mb-3" *ngIf="produto.datacadastro">
+    <!-- <div class="mb-3" *ngIf="produto.datacadastro">
       <label for="datacadastro" class="form-label">Data de Cadastro</label>
-      <input
-        type="text"
-        id="datacadastro"
-        class="form-control rounded-pill border border-dark"
-        name="datacadastro"
-        [ngModel]="produto.datacadastro"
-        disabled
-      />
+      <input type="text" id="datacadastro" class="form-control rounded-pill border border-dark" name="datacadastro"
+        [ngModel]="produto.datacadastro" disabled />
+    </div> -->
+
+    <!-- Visualização da imagem da foto (se existir) -->
+    <div class="mb-3" *ngIf="produto.foto">
+      <label class="form-label d-block">Pré-visualização da Imagem</label>
+      <img [src]="produto.foto" alt="Imagem do produto" class="img-thumbnail" style="max-height: 200px;" />
     </div>
+
 
     <!-- Campo: Foto (como texto) -->
     <div class="mb-3">
       <label for="foto" class="form-label">Foto</label>
-      <input
-        type="text"
-        id="foto"
-        name="foto"
-        class="form-control rounded-pill border border-dark"
-        placeholder="Digite o link da foto do produto"
-        [(ngModel)]="produto.foto"
-      />
+      <input type="text" id="foto" name="foto" class="form-control rounded-pill border border-dark"
+        placeholder="Digite o link da foto do produto" [(ngModel)]="produto.foto" />
     </div>
 
     <!-- Nome do Produto -->
     <div class="mb-3">
       <label for="nomeProduto" class="form-label">Nome do produto</label>
-      <input
-        type="text"
-        id="nomeProduto"
-        name="nomeProduto"
-        class="form-control rounded-pill border border-dark"
-        placeholder="Digite o nome do produto. Ex: Feijão Branco"
-        [(ngModel)]="produto.nomeProduto"
-      />
+      <input type="text" id="nomeProduto" name="nomeProduto" class="form-control rounded-pill border border-dark"
+        placeholder="Digite o nome do produto. Ex: Feijão Branco" [(ngModel)]="produto.nomeProduto" />
     </div>
 
     <!-- Marca -->
     <div class="mb-3">
       <label for="marca" class="form-label">Marca</label>
-      <input
-        type="text"
-        id="marca"
-        name="marca"
-        class="form-control rounded-pill border border-dark"
-        placeholder="Digite a marca. Ex: Camil"
-        [(ngModel)]="produto.marca"
-      />
+      <input type="text" id="marca" name="marca" class="form-control rounded-pill border border-dark"
+        placeholder="Digite a marca. Ex: Camil" [(ngModel)]="produto.marca" />
     </div>
 
     <!-- Município de Origem -->
     <div class="mb-3">
       <label for="municipioOrigem" class="form-label">Município de Origem</label>
-      <input
-        type="text"
-        id="municipioOrigem"
-        name="municipioOrigem"
-        class="form-control rounded-pill border border-dark"
-        placeholder="Digite o município de origem. Ex: Santa Maria"
-        [(ngModel)]="produto.municipioOrigem"
-      />
+      <input type="text" id="municipioOrigem" name="municipioOrigem"
+        class="form-control rounded-pill border border-dark" placeholder="Digite o município de origem. Ex: Santa Maria"
+        [(ngModel)]="produto.municipioOrigem" />
     </div>
 
     <!-- Fabricante -->
     <div class="mb-3">
       <label for="fabricante" class="form-label">Fabricante</label>
-      <input
-        type="text"
-        id="fabricante"
-        name="fabricante"
-        class="form-control rounded-pill border border-dark"
-        placeholder="Digite o fabricante. Ex: Bandeirantes Ltda"
-        [(ngModel)]="produto.fabricante"
-      />
+      <input type="text" id="fabricante" name="fabricante" class="form-control rounded-pill border border-dark"
+        placeholder="Digite o fabricante. Ex: Bandeirantes Ltda" [(ngModel)]="produto.fabricante" />
     </div>
 
     <!-- Está ativo? -->
@@ -132,51 +96,28 @@
       <label class="form-label d-block mb-2">Está ativo?</label>
 
       <div class="form-check form-check-inline">
-        <input
-          class="form-check-input radio-destacado"
-          type="radio"
-          name="ativo"
-          id="nao"
-          value="N"
-          [(ngModel)]="produto.ativo"
-        />
+        <input class="form-check-input radio-destacado" type="radio" name="ativo" id="nao" value="N"
+          [(ngModel)]="produto.ativo" />
         <label class="form-check-label" for="nao">Não</label>
       </div>
 
       <div class="form-check form-check-inline">
-        <input
-          class="form-check-input radio-destacado"
-          type="radio"
-          name="ativo"
-          id="sim"
-          value="S"
-          [(ngModel)]="produto.ativo"
-        />
+        <input class="form-check-input radio-destacado" type="radio" name="ativo" id="sim" value="S"
+          [(ngModel)]="produto.ativo" />
         <label class="form-check-label" for="sim">Sim</label>
       </div>
     </div>
 
     <!-- Botões -->
     <div class="d-flex justify-content-between mt-4">
-      <button
-        type="button"
-        class="btn btn-danger px-4 rounded-pill"
-        [routerLink]="produto.id ? '/produtos/lista' : '/home'"
-      >
+      <button type="button" class="btn btn-danger px-4 rounded-pill"
+        [routerLink]="produto.id ? '/produtos/lista' : '/home'">
         Cancelar
       </button>
-      <button
-        type="submit"
-        class="btn btn-success px-4 rounded-pill"
-        *ngIf="!produto.id"
-      >
+      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="!produto.id">
         Cadastrar Produto
       </button>
-      <button
-        type="submit"
-        class="btn btn-success px-4 rounded-pill"
-        *ngIf="produto.id"
-      >
+      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="produto.id">
         Atualizar Dados
       </button>
     </div>
