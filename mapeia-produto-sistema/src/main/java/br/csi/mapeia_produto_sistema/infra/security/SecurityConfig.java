@@ -33,11 +33,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth->
                         auth
 //                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers(HttpMethod.POST,"/login", "/usuario", "/produto").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/login", "/usuario", "/produto", "/estabelecimento").permitAll()
                                 //.requestMatchers(HttpMethod.GET, "/cliente").hasAuthority("ROLE_ADMIN")
 //                                .requestMatchers(HttpMethod.GET, "/cliente").hasAnyAuthority("ROLE_CLIENTE", "ROLE_ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/usuario").hasAnyAuthority("Admin", "Produtor", "Consumidor")
                                 .requestMatchers(HttpMethod.GET, "/produto").hasAnyAuthority("Admin", "Produtor", "Consumidor")
+                                .requestMatchers(HttpMethod.GET, "/estabelecimento").hasAnyAuthority("Admin", "Produtor", "Consumidor")
 //                                .requestMatchers(HttpMethod.POST, "/produto").hasAnyAuthority("Admin", "Produtor", "Consumidor")
                                 .anyRequest().authenticated())
                 .addFilterBefore(this.autenticaoFilter, UsernamePasswordAuthenticationFilter.class)
