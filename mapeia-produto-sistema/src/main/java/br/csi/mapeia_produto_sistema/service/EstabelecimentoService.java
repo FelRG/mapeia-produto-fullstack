@@ -29,7 +29,7 @@ public class EstabelecimentoService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + idUsuario));
 
         Estabelecimento estabelecimento = new Estabelecimento();
-        estabelecimento.setNomeEstabelecimento(dto.getNomeEstabelecimento());
+        estabelecimento.setNomeEstabelecimento(dto.getNomeEstabelecimento().toUpperCase());
         estabelecimento.setEndereco(dto.getEndereco());
         estabelecimento.setNumero(dto.getNumero());
         estabelecimento.setEstado(dto.getEstado());
@@ -58,7 +58,7 @@ public class EstabelecimentoService {
     public Estabelecimento atualizarEstabelecimento(Long id, EstabelecimentoDTO dto) {
         Estabelecimento est = buscarEstabelecimentoPorId(id);
 
-        est.setNomeEstabelecimento(dto.getNomeEstabelecimento());
+        est.setNomeEstabelecimento(dto.getNomeEstabelecimento().toUpperCase());
         est.setEndereco(dto.getEndereco());
         est.setNumero(dto.getNumero());
         est.setEstado(dto.getEstado());

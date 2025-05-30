@@ -53,9 +53,9 @@ public class UsuarioService {
 //        usuario.setSenha(new BCryptPasswordEncoder().encode(usuarioAtualizado.getSenha()));
 //        usuario.setSenha(usuarioAtualizado.getSenha());
         // Atualiza a senha somente se ela foi alterada
-        if (!usuarioAtualizado.getSenha().isBlank()) {
-            usuario.setSenha(new BCryptPasswordEncoder().encode(usuarioAtualizado.getSenha()));
-        }
+//        if (!usuarioAtualizado.getSenha().isBlank()) {
+//            usuario.setSenha(new BCryptPasswordEncoder().encode(usuarioAtualizado.getSenha()));
+//        }
         usuario.setTipoPermissao(usuarioAtualizado.getTipoPermissao());
         usuario.setAtivo(usuarioAtualizado.getAtivo());
 //        usuario.setDatacadastro(usuarioAtualizado.getDatacadastro());

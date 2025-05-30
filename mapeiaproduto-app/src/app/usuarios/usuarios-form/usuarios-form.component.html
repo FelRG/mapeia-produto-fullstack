@@ -1,7 +1,7 @@
 <br>
 <ol class="breadcrumb mb-4">
   <li class="breadcrumb-item active">
-    <ng-container *ngIf="!isAdmin || IdContaAtualNaEdicao; else adminGerenciar">
+    <ng-container *ngIf="(!isAdmin || IdContaAtualNaEdicao) && usuario.id; else adminGerenciar">
       Alterar Dados Pessoais
     </ng-container>
     <ng-template #adminGerenciar>
@@ -133,7 +133,7 @@
     </div>
 
     <!-- Senha -->
-    <!-- <div class="mb-3 position-relative">
+    <div class="mb-3 position-relative" *ngIf="!usuario.id">
       <label for="senha" class="form-label">Senha</label>
       <div class="input-group">
         <input
@@ -149,7 +149,7 @@
         >
         </span>
       </div>
-    </div> -->
+    </div>
 
     <!-- Botões -->
     <div class="d-flex justify-content-between">

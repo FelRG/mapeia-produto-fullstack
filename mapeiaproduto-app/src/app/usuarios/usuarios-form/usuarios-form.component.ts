@@ -57,15 +57,17 @@ export class UsuariosFormComponent implements OnInit {
   // }
 
   ngOnInit(): void {
+    
+    this.isAdmin = this.contaAtualPermissao === 'Admin';
+
     this.activatedRoute.params.subscribe((params) => {
       if (params && params['id']) {
         this.id = params['id'];
         this.service.getUsuarioById(this.id).subscribe(
           (response) => {
             this.usuario = response;
-            this.isAdmin = this.contaAtualPermissao === 'Admin';
             this.IdContaAtualNaEdicao = this.contaAtualId === Number(this.id);
-            console.log(this.contaAtualId, this.id);
+            console.log(this.usuario);
           },
           (errorResponse) => {
             this.usuario = new Usuario();

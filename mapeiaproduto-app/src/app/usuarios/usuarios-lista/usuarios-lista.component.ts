@@ -19,6 +19,9 @@ export class UsuariosListaComponent implements OnInit {
   q! : string;
   // lista!: UsuariosBusca[];
   messagemErroBusca!: string;
+  contaAtualId: number = Number(localStorage.getItem('id')) || 0;
+
+
 
   constructor(
     private service: UsuariosService, 
