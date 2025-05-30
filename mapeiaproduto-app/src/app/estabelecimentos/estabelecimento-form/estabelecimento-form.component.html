@@ -1,112 +1,131 @@
 <br />
 <ol class="breadcrumb mb-4">
   <li class="breadcrumb-item active">
-  Estabelecimento &gt; Cadastrar Estabelecimento
+    Estabelecimento &gt;
+    {{
+    estabelecimento.id ? "Editar" : "Cadastrar"
+    }}
+    Estabelecimento
   </li>
 </ol>
 
 <div class="container pb-4">
-  <form>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-success" role="alert" *ngIf="sucesso">
+        Estabelecimento salvo/atualizado com sucesso!
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-danger" role="alert" *ngIf="erro">
+        Erro ao salvar/atualizar estabelecimento.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-danger" role="alert" *ngIf="erroUsuarioInvalido">
+        Erro: usuário inválido.
+      </div>
+    </div>
+  </div>
+
+  <form #estabelecimentoForm="ngForm" (ngSubmit)="onSubmit()">
     <!-- Nome do Estabelecimento -->
     <div class="mb-3">
       <label for="nome" class="form-label">Nome do estabelecimento</label>
-      <input
-        type="text"
-        id="nome"
-        name="nome"
-        class="form-control rounded-pill border border-dark"
+      <input type="text" id="nome" name="nome" class="form-control rounded-pill border border-dark"
         placeholder="Digite o nome do estabelecimento. Ex: Queijaria do Sul"
-      />
+        [(ngModel)]="estabelecimento.nomeEstabelecimento" />
     </div>
 
     <!-- Categoria do Local -->
     <div class="mb-3">
       <label for="categoria" class="form-label">Categoria do local</label>
-      <input
-        type="text"
-        id="categoria"
-        name="categoria"
-        class="form-control rounded-pill border border-dark"
+      <input type="text" id="categoria" name="categoria" class="form-control rounded-pill border border-dark"
         placeholder="Digite a categoria do local. Ex: Comércio de Frutas e Legumes"
-      />
+        [(ngModel)]="estabelecimento.categoria" />
     </div>
 
     <!-- Endereço -->
     <div class="mb-3">
       <label for="endereco" class="form-label">Endereço</label>
-      <input
-        type="text"
-        id="endereco"
-        name="endereco"
-        class="form-control rounded-pill border border-dark"
-        placeholder="Digite o endereço. Ex: Rua dos Almirantes"
-      />
+      <input type="text" id="endereco" name="endereco" class="form-control rounded-pill border border-dark"
+        placeholder="Digite o endereço. Ex: Rua dos Almirantes" [(ngModel)]="estabelecimento.endereco" />
     </div>
 
     <!-- Número -->
     <div class="mb-3">
       <label for="numero" class="form-label">Número</label>
-      <input
-        type="text"
-        id="numero"
-        name="numero"
-        class="form-control rounded-pill border border-dark"
-        placeholder="Digite o número. Ex: 1669"
-      />
+      <input type="text" id="numero" name="numero" class="form-control rounded-pill border border-dark"
+        placeholder="Digite o número. Ex: 1669" [(ngModel)]="estabelecimento.numero" />
     </div>
 
     <!-- Estado -->
     <div class="mb-3">
       <label for="estado" class="form-label">Estado</label>
-      <select
-        id="estado"
-        name="estado"
-        class="form-select rounded-pill border border-dark"
-      >
-        <option value="" disabled selected>Selecione o estado</option>
+      <select id="estado" name="estado" class="form-select rounded-pill border border-dark"
+        [(ngModel)]="estabelecimento.estado">
+        <option value="" disabled>Selecione o estado</option>
         <option value="RS">RS</option>
-        <option value="SC">SC</option>
-        <option value="PR">PR</option>
-        <option value="SP">SP</option>
         <!-- Adicione mais estados conforme necessário -->
       </select>
     </div>
 
+
     <!-- Cidade -->
     <div class="mb-3">
       <label for="cidade" class="form-label">Cidade</label>
-      <select
-        id="cidade"
-        name="cidade"
-        class="form-select rounded-pill border border-dark"
-      >
-        <option value="" disabled selected>Selecione a cidade</option>
-        <option value="Santa Maria">Santa Maria</option>
-        <option value="Porto Alegre">Porto Alegre</option>
-        <option value="Caxias do Sul">Caxias do Sul</option>
-        <!-- Adicione dinamicamente ou fixe conforme necessidade -->
+      <select id="cidade" name="cidade" class="form-select rounded-pill border border-dark"
+        [(ngModel)]="estabelecimento.cidade">
+        <option value="" disabled>Selecione a cidade</option>
+        <option *ngFor="let cidade of cidades" [value]="cidade">
+          {{ cidade }}
+        </option>
       </select>
     </div>
+
 
     <!-- Complemento -->
     <div class="mb-3">
       <label for="complemento" class="form-label">Complemento</label>
-      <input
-        type="text"
-        id="complemento"
-        name="complemento"
-        class="form-control rounded-pill border border-dark"
-        placeholder="Digite o complemento. Ex: Casa, Apartamento, Loja"
-      />
+      <input type="text" id="complemento" name="complemento" class="form-control rounded-pill border border-dark"
+        placeholder="Digite o complemento. Ex: Casa, Apartamento, Loja" [(ngModel)]="estabelecimento.complemento" />
+    </div>
+
+     <!-- Está ativo? -->
+    <div class="mb-3" *ngIf="estabelecimento.id">
+      <label class="form-label d-block mb-2">Está ativo?</label>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input radio-destacado" type="radio" name="ativo" id="nao" value="N"
+          [(ngModel)]="estabelecimento.ativo" />
+        <label class="form-check-label" for="nao">Não</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input radio-destacado" type="radio" name="ativo" id="sim" value="S"
+          [(ngModel)]="estabelecimento.ativo" />
+        <label class="form-check-label" for="sim">Sim</label>
+      </div>
     </div>
 
     <!-- Botões -->
     <div class="d-flex justify-content-between mt-4">
-      <button type="button" class="btn btn-danger px-4 rounded-pill">
+      <button type="button" class="btn btn-danger px-4 rounded-pill"
+        [routerLink]="estabelecimento.id ? '/estabelecimentos/lista' : '/home'">
         Cancelar
       </button>
-      <button type="submit" class="btn btn-success px-4 rounded-pill">
+      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="!estabelecimento.id">
         Cadastrar Estabelecimento
+      </button>
+      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="estabelecimento.id">
+        Atualizar Dados
       </button>
     </div>
   </form>

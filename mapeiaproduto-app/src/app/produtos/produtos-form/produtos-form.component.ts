@@ -30,7 +30,8 @@ export class ProdutosFormComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ){
     this.produto = new Produto();
-    this.produto.idUsuario = this.idUsuario;
+    // this.produto.idUsuario = this.idUsuario;
+    this.produto.ativo = 'S'; // Define ativo como 'S' por padrão
    }
 
   ngOnInit(): void {
@@ -41,7 +42,7 @@ export class ProdutosFormComponent implements OnInit {
         this.service.getProdutoById(this.id).subscribe(
           (response) => {
             this.produto = response
-            this.produto.idUsuario = this.idUsuario;
+            // this.produto.idUsuario = this.idUsuario;
           },
           (errorResponse) => (this.produto = new Produto())
         );
@@ -56,12 +57,13 @@ export class ProdutosFormComponent implements OnInit {
       return; // Interrompe o cadastro/atualização
     }
 
-    this.produto.idUsuario = this.idUsuario;
+    // this.produto.idUsuario = this.idUsuario;
     this.erroUsuarioInvalido = false; // zera erro, se passar
     console.log(this.produto);
 
     if (this.id) {
-      this.service.atualizar(this.produto).subscribe(
+      const dto = Produto.toDTO(this.produto);
+      this.service.atualizar(dto).subscribe(
         (response) => {
           this.sucess = true;
           this.err = false;
@@ -72,6 +74,7 @@ export class ProdutosFormComponent implements OnInit {
         }
       );
     } else {
+      this.produto.idUsuario = this.idUsuario;
       this.service.salvar(this.produto).subscribe(
         (response) => {
           this.sucess = true;
