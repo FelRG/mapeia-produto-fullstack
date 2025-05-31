@@ -27,35 +27,6 @@ export class UsuariosFormComponent implements OnInit {
     this.usuario = new Usuario();
   }
 
-  // ngOnInit(): void {
-  //   let params = this.activatedRoute.params
-  //   if(params && params.value && params.value.id){
-  //     this.id = params.value.id;
-  //     this.service.getUsuarioById(this.id)
-  //     .subscribe(
-  //       response => this.usuario = response,
-  //       errorResponse => this.usuario = new Usuario()
-  //     );
-  //   }
-  // }
-
-  // ngOnInit(): void {
-  //   this.activatedRoute.params.subscribe((params: Params) => {
-  //     this.id = params['id'];
-
-  //     if (this.id) {
-  //       this.service.getUsuarioById(this.id).subscribe(
-  //         response => {
-  //           this.usuario = response;
-  //         },
-  //         error => {
-  //           this.usuario = new Usuario();
-  //         }
-  //       );
-  //     }
-  //   });
-  // }
-
   ngOnInit(): void {
     
     this.isAdmin = this.contaAtualPermissao === 'Admin';
