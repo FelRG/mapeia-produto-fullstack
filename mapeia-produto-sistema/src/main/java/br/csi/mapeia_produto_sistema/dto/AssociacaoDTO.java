@@ -11,6 +11,8 @@ import java.util.Date;
 @Builder
 public class AssociacaoDTO {
 
+    private Long id; // novo campo de identificação primária
+
     private Long usuarioId;
     private Long produtoId;
     private Long estabelecimentoId;

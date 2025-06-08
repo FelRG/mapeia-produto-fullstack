@@ -23,20 +23,19 @@ public class AssociacaoController {
     }
 
     // Atualizar uma associação existente
-    @PutMapping
-    public ResponseEntity<AssociacaoDTO> update(@RequestBody AssociacaoDTO dto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<AssociacaoDTO> update(
+            @PathVariable Long id,
+            @RequestBody AssociacaoDTO dto) {
+        dto.setId(id); // garante que o ID está no DTO
         AssociacaoDTO atualizada = associacaoService.update(dto);
         return ResponseEntity.ok(atualizada);
     }
 
-    // Buscar uma associação por ID composto
-    @GetMapping("/{usuarioId}/{produtoId}/{estabelecimentoId}")
-    public ResponseEntity<AssociacaoDTO> getById(
-            @PathVariable Long usuarioId,
-            @PathVariable Long produtoId,
-            @PathVariable Long estabelecimentoId
-    ) {
-        AssociacaoDTO dto = associacaoService.getById(usuarioId, produtoId, estabelecimentoId);
+    // Buscar uma associação por ID simples
+    @GetMapping("/{id}")
+    public ResponseEntity<AssociacaoDTO> getById(@PathVariable Long id) {
+        AssociacaoDTO dto = associacaoService.getById(id);
         return ResponseEntity.ok(dto);
     }
 
@@ -47,14 +46,11 @@ public class AssociacaoController {
         return ResponseEntity.ok(todas);
     }
 
-    // Deletar uma associação por ID composto
-    @DeleteMapping("/{usuarioId}/{produtoId}/{estabelecimentoId}")
-    public ResponseEntity<Void> delete(
-            @PathVariable Long usuarioId,
-            @PathVariable Long produtoId,
-            @PathVariable Long estabelecimentoId
-    ) {
-        associacaoService.deleteById(usuarioId, produtoId, estabelecimentoId);
+    // Deletar uma associação por ID simples
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        associacaoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
+

@@ -10,6 +10,12 @@ public class AssociacaoMapper {
 
     public static Associacao toEntity(AssociacaoDTO dto, Usuario usuario, Produto produto, Estabelecimento estabelecimento) {
         Associacao a = new Associacao();
+
+        // Se o DTO vier com ID (ex: update), pode ser setado aqui:
+        if (dto.getId() != null) {
+            a.setId(dto.getId());
+        }
+
         a.setUsuario(usuario);
         a.setProduto(produto);
         a.setEstabelecimento(estabelecimento);
@@ -20,6 +26,7 @@ public class AssociacaoMapper {
 
     public static AssociacaoDTO toDTO(Associacao a) {
         return AssociacaoDTO.builder()
+                .id(a.getId())  // Novo campo
                 .usuarioId(a.getUsuario().getId())
                 .produtoId(a.getProduto().getId())
                 .estabelecimentoId(a.getEstabelecimento().getId())
@@ -28,4 +35,3 @@ public class AssociacaoMapper {
                 .build();
     }
 }
-

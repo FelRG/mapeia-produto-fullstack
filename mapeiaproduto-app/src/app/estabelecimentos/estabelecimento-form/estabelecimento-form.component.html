@@ -83,7 +83,7 @@
       <label for="cidade" class="form-label">Cidade</label>
       <select id="cidade" name="cidade" class="form-select rounded-pill border border-dark"
         [(ngModel)]="estabelecimento.cidade">
-        <option value="" disabled>Selecione a cidade</option>
+        <option value="" disabled selected>Selecione a cidade...</option>
         <option *ngFor="let cidade of cidades" [value]="cidade">
           {{ cidade }}
         </option>

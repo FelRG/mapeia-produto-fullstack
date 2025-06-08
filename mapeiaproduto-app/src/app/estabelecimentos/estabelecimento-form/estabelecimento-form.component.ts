@@ -59,6 +59,7 @@ export class EstabelecimentoFormComponent implements OnInit {
   }
 
   onSubmit(): void {
+    console.log(this.estabelecimento);
     if (!this.estabelecimento.estado || !this.estabelecimento.cidade) {
       alert("Por favor, selecione um estado e uma cidade.");
       return;

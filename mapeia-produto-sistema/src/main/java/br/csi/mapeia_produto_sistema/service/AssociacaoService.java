@@ -40,15 +40,13 @@ public class AssociacaoService {
         return AssociacaoMapper.toDTO(saved);
     }
 
-    public AssociacaoDTO getById(Long usuarioId, Long produtoId, Long estabelecimentoId) {
-        AssociacaoId id = new AssociacaoId(usuarioId, produtoId, estabelecimentoId);
+    public AssociacaoDTO getById(Long id) {
         Associacao associacao = associacaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Associação não encontrada"));
         return AssociacaoMapper.toDTO(associacao);
     }
 
-    public void deleteById(Long usuarioId, Long produtoId, Long estabelecimentoId) {
-        AssociacaoId id = new AssociacaoId(usuarioId, produtoId, estabelecimentoId);
+    public void deleteById(Long id) {
         if (!associacaoRepository.existsById(id)) {
             throw new RuntimeException("Associação não encontrada");
         }
@@ -56,17 +54,15 @@ public class AssociacaoService {
     }
 
     public AssociacaoDTO update(AssociacaoDTO dto) {
-        AssociacaoId id = new AssociacaoId(
-                dto.getUsuarioId(),
-                dto.getProdutoId(),
-                dto.getEstabelecimentoId()
-        );
+        if (dto.getId() == null) {
+            throw new IllegalArgumentException("ID da associação é obrigatório para atualização");
+        }
 
-        Associacao associacao = associacaoRepository.findById(id)
+        Associacao associacao = associacaoRepository.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("Associação não encontrada"));
 
         associacao.setAtivo(dto.getAtivo());
-//        associacao.setDatacadastro(dto.getDatacadastro());
+        // associacao.setDatacadastro(dto.getDatacadastro()); // Se quiser permitir alteração da data
 
         Associacao updated = associacaoRepository.save(associacao);
         return AssociacaoMapper.toDTO(updated);
@@ -78,6 +74,6 @@ public class AssociacaoService {
                 .map(AssociacaoMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
 }
+
 

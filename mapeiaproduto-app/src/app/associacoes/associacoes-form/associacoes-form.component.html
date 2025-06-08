@@ -1,40 +1,90 @@
 <br>
 <ol class="breadcrumb mb-4">
-  <li class="breadcrumb-item active">Associação &gt; Cadastrar Associação</li>
+  <li class="breadcrumb-item active">
+    Associação &gt;
+    {{
+    associacao.id ? "Editar" : "Cadastrar"
+    }}
+    Associação
+  </li>
 </ol>
 
 <div class="container pb-4">
+
+<div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-success" role="alert" *ngIf="sucesso">
+        Associação salvo/atualizado com sucesso!
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-danger" role="alert" *ngIf="erro">
+        Erro ao salvar/atualizar associação.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-danger" role="alert" *ngIf="erroUsuarioInvalido">
+        Erro: usuário inválido.
+      </div>
+    </div>
+  </div>
+
   <!-- Formulário de Associação -->
-  <form>
+  <form #associacaoForm="ngForm" (submit)="onSubmit()">
     <!-- Estabelecimento -->
-    <div class="mb-4">
+    <div class="mb-3">
       <label for="estabelecimento" class="form-label">Estabelecimento</label>
-      <select class="form-select rounded-pill px-3 border border-dark" id="estabelecimento">
-        <option selected>Quintal do Sabor</option>
-        <option>Sabor da Roça</option>
-        <option>Feira Candiru</option>
-        <option>Mercadinho do Leste</option>
+      <select class="form-select rounded-pill px-3 border border-dark" id="estabelecimento" name="estabelecimento"
+      [(ngModel)]="associacao.estabelecimentoId">
+        <option value="0" disabled selected>Selecione um Estabelecimento...</option>
+        <option *ngFor="let estabelecimento of estabelecimentos" [value]="estabelecimento.id">{{ estabelecimento.nomeEstabelecimento }}</option>
       </select>
     </div>
 
     <!-- Produto -->
-    <div class="mb-5">
+    <div class="mb-3">
       <label for="produto" class="form-label">Produto</label>
-      <select class="form-select rounded-pill px-3 border border-dark" id="produto">
-        <option selected>Feijão Branco</option>
-        <option>Arroz Vermelho</option>
-        <option>Farinha de Mandioca</option>
-        <option>Castanha do Pará</option>
+      <select class="form-select rounded-pill px-3 border border-dark" id="produto" name="produto"
+      [(ngModel)]="associacao.produtoId">
+        <option value="0" disabled selected>Selecione um Produto...</option>
+        <option *ngFor="let produto of produtos" [value]="produto.id">{{ produto.nomeProduto }}</option>
       </select>
     </div>
 
+    <!-- Está ativo? -->
+    <div class="mb-3" *ngIf="associacao.id">
+      <label class="form-label d-block mb-2">Está ativo?</label>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input radio-destacado" type="radio" name="ativo" id="nao" value="N"
+          [(ngModel)]="associacao.ativo" />
+        <label class="form-check-label" for="nao">Não</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input radio-destacado" type="radio" name="ativo" id="sim" value="S"
+          [(ngModel)]="associacao.ativo" />
+        <label class="form-check-label" for="sim">Sim</label>
+      </div>
+    </div>
+
     <!-- Botões -->
-    <div class="d-flex justify-content-center gap-4">
-      <button type="button" class="btn btn-danger px-4 rounded-pill">
+    <div class="d-flex justify-content-between mt-4">
+      <button type="button" class="btn btn-danger px-4 rounded-pill"
+        [routerLink]="associacao.id ? '/associacoes/lista' : '/home'">
         Cancelar
       </button>
-      <button type="submit" class="btn btn-success px-4 rounded-pill">
-        Confirmar Associação
+      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="!associacao.id">
+        Cadastrar Associação
+      </button>
+      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="associacao.id">
+        Atualizar Dados
       </button>
     </div>
   </form>
