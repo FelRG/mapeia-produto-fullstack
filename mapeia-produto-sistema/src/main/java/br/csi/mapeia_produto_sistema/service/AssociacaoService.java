@@ -74,6 +74,13 @@ public class AssociacaoService {
                 .map(AssociacaoMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public List<AssociacaoDTO> getByProdutoId(Long produtoId) {
+        return associacaoRepository.findByProdutoId(produtoId)
+                .stream()
+                .map(AssociacaoMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }
 
 

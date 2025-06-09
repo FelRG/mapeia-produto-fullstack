@@ -52,5 +52,13 @@ public class AssociacaoController {
         associacaoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    // Buscar associações por ID de produto
+    @GetMapping("/produto/{produtoId}")
+    public ResponseEntity<List<AssociacaoDTO>> getByProdutoId(@PathVariable Long produtoId) {
+        List<AssociacaoDTO> associacoes = associacaoService.getByProdutoId(produtoId);
+        return ResponseEntity.ok(associacoes);
+    }
+
 }
 

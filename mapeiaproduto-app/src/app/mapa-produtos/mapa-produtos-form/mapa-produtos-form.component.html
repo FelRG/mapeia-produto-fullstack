@@ -5,17 +5,18 @@
 
 <div class="container pb-4">
 
-<label for="buscaProduto" class="form-label">Pesquise por um nome de produto</label>
+  <label for="buscaProduto" class="form-label">Pesquise por um nome de produto</label>
   <!-- Campo de Busca -->
   <div class="d-flex mb-4">
-    <input
-      type="text"
-      class="form-control rounded-pill border border-dark me-2"
-      placeholder="Digite Algo..."
-    />
-    <button class="btn btn-outline-dark rounded-pill px-4 btn-search" type="button">
+    <input type="text" class="form-control rounded-pill border border-dark me-2" [(ngModel)]="nomeProduto"
+      placeholder="Digite o nome de um produto..." />
+    <button class="btn btn-outline-dark rounded-pill px-4 btn-search" type="button" (click)="buscarProduto()">
       <i class="bi bi-search"></i>
     </button>
   </div>
+
+  <!-- Mapa abaixo -->
+  <div #mapa style="height: 500px; width: 100%; border-radius: 12px; border: 1px solid #ccc;"></div>
+
 
 </div>
