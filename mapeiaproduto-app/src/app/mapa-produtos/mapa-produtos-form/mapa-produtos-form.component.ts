@@ -86,9 +86,22 @@ export class MapaProdutosFormComponent implements OnInit {
                   this.map.fitBounds(bounds);
                 }
 
+                // const infoWindow = new google.maps.InfoWindow({
+                //   content: `<strong>${est.nomeEstabelecimento}</strong><br/>Produto: ${produto.nomeProduto}`,
+                // });
+
                 const infoWindow = new google.maps.InfoWindow({
-                  content: `<strong>${est.nomeEstabelecimento}</strong><br/>Produto: ${produto.nomeProduto}`,
+                  content: `
+                    <div style="cursor: pointer;">
+                      <a href="/mapa-produtos/descricao/${assoc.id}" style="text-decoration: none; color: inherit;">
+                        <strong>${est.nomeEstabelecimento}</strong><br/>
+                        Produto: ${produto.nomeProduto}<br/>
+                        <em style="color: blue;">Clique para ver mais</em>
+                      </a>
+                    </div>
+                  `,
                 });
+
 
                 marker.addListener('click', () => {
                   infoWindow.open(this.map, marker);

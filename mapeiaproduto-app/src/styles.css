@@ -1,60 +1,111 @@
     body {
       background-color: #ffffff;
     }
+
     .navbar-custom {
       background-color: #D9D9D9;
     }
+
     .dropdown-menu {
       background-color: #D9D9D9;
       border: none;
       padding: 10px 0;
     }
+
     .dropdown-item {
       color: #000000;
       font-size: 18px;
     }
+
     .dropdown-item:hover {
       background-color: #dcdcdc;
     }
+
     .navbar-nav .nav-link {
       color: #000 !important;
       font-weight: 400;
     }
+
     .profile-menu {
       background-color: #D9D9D9;
       padding: 1rem;
       border-radius: 0.5rem;
       width: 220px;
     }
+
     .profile-menu a {
       color: #000;
       font-size: 16px;
     }
+
     .profile-menu a:hover {
       text-decoration: none;
     }
-      .radio-destacado {
-    width: 1.2em;
-    height: 1.2em;
-    border: 1px solid black;
-  }
-  .btn-outline-dark.custom-hover:hover {
-  background-color: #d9d9d9; /* cinza claro */
-  color: black;
-}
-.btn-search{
-    transition: background-color 0.2s ease-in-out;
-}
 
-.btn-search:hover {
-  background-color: #d9d9d9;
-}
-/* Garante que o ícone continue preto mesmo no hover */
-.btn-search:hover i {
-  color: #000000;
-}
+    .radio-destacado {
+      width: 1.2em;
+      height: 1.2em;
+      border: 1px solid black;
+    }
 
-.tabela-header-cinza {
-  background-color: #8a8a8a;
-}
+    .btn-outline-dark.custom-hover:hover {
+      background-color: #d9d9d9;
+      /* cinza claro */
+      color: black;
+    }
 
+    .btn-search {
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .btn-search:hover {
+      background-color: #d9d9d9;
+    }
+
+    /* Garante que o ícone continue preto mesmo no hover */
+    .btn-search:hover i {
+      color: #000000;
+    }
+
+    .tabela-header-cinza {
+      background-color: #8a8a8a;
+    }
+
+    .containerdescricao {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 32px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .subtitle {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      /* controla a distância entre os dois */
+      margin: 8px 0 12px;
+      font-weight: 500;
+      color: #444;
+    }
+
+
+    .distance {
+      margin: 16px 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .distance img {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
+
+    .info {
+      margin: 16px 0;
+    }

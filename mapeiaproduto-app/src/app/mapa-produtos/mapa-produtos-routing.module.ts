@@ -9,7 +9,7 @@ const routes: Routes = [
   {path: 'mapa-produtos', component: LayoutComponent, canActivate:[AuthGuard], children: [
         {path: 'form', component: MapaProdutosFormComponent},
         // {path: 'form/:id', component: MapaProdutosFormComponent},
-        {path: 'descricao', component: MapaProdutosDescricaoComponent},
+        {path: 'descricao/:id', component: MapaProdutosDescricaoComponent},
         {path: '', redirectTo: '/mapa-produtos/form', pathMatch: 'full'},
       ]},
 ];
