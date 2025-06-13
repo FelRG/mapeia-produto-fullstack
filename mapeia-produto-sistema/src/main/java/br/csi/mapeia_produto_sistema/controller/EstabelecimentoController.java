@@ -71,4 +71,11 @@ public class EstabelecimentoController {
         List<Estabelecimento> estabelecimentos = estabelecimentoService.buscarPorNome(termo);
         return ResponseEntity.ok(estabelecimentos);
     }
+
+    @GetMapping(params = "limite")
+    public ResponseEntity<List<Estabelecimento>> buscarPrimeiros(@RequestParam("limite") int limite) {
+        List<Estabelecimento> estabelecimentos = estabelecimentoService.buscarPrimeiros(limite);
+        return ResponseEntity.ok(estabelecimentos);
+    }
+
 }

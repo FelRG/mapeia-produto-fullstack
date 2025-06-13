@@ -91,4 +91,9 @@ public class EstabelecimentoService {
     public List<Estabelecimento> buscarPorNome(String nome) {
         return repository.findByNomeEstabelecimentoContainingIgnoreCase(nome);
     }
+
+    public List<Estabelecimento> buscarPrimeiros(int limite) {
+        return repository.findTopN(limite);
+    }
+
 }

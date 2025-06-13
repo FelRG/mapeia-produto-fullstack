@@ -11,7 +11,7 @@
 
 <div class="container pb-4">
 
-<div class="row">
+  <div class="row">
     <div class="col-md-12">
       <div class="alert alert-success" role="alert" *ngIf="sucesso">
         Associação salvo/atualizado com sucesso!
@@ -38,20 +38,38 @@
   <!-- Formulário de Associação -->
   <form #associacaoForm="ngForm" (submit)="onSubmit()">
     <!-- Estabelecimento -->
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label for="estabelecimento" class="form-label">Estabelecimento</label>
       <select class="form-select rounded-pill px-3 border border-dark" id="estabelecimento" name="estabelecimento"
       [(ngModel)]="associacao.estabelecimentoId">
         <option value="0" disabled selected>Selecione um Estabelecimento...</option>
         <option *ngFor="let estabelecimento of estabelecimentos" [value]="estabelecimento.id">{{ estabelecimento.nomeEstabelecimento }}</option>
       </select>
+    </div> -->
+
+    <!-- Campo Estabelecimento com busca -->
+    <!-- Estabelecimento -->
+    <div class="mb-3 position-relative" #autocompleteContainer>
+      <label for="estabelecimento" class="form-label">Estabelecimento</label>
+      <input id="estabelecimento" name="estabelecimentoInput" type="text"
+        class="form-control rounded-pill px-3 border border-dark" [(ngModel)]="estabelecimentoInput"
+        (input)="buscarEstabelecimentos(estabelecimentoInput)" [disabled]="isEditMode"
+        (focus)="aoFocarCampoEstabelecimento()" placeholder="Digite o nome do estabelecimento..." />
+
+
+      <ul class="list-group position-absolute w-100" *ngIf="mostrarSugestoes && estabelecimentosFiltrados.length > 0">
+        <li class="list-group-item" *ngFor="let est of estabelecimentosFiltrados"
+          (click)="selecionarEstabelecimento(est)">
+          {{ est.nomeEstabelecimento }}
+        </li>
+      </ul>
     </div>
 
     <!-- Produto -->
     <div class="mb-3">
       <label for="produto" class="form-label">Produto</label>
       <select class="form-select rounded-pill px-3 border border-dark" id="produto" name="produto"
-      [(ngModel)]="associacao.produtoId">
+        [(ngModel)]="associacao.produtoId">
         <option value="0" disabled selected>Selecione um Produto...</option>
         <option *ngFor="let produto of produtos" [value]="produto.id">{{ produto.nomeProduto }}</option>
       </select>
@@ -89,4 +107,3 @@
     </div>
   </form>
 </div>
-

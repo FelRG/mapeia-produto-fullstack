@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Estabelecimento } from 'src/app/estabelecimentos/estabelecimento';
 import { EstabelecimentosService } from 'src/app/estabelecimentos.service';
 import { Produto } from 'src/app/produtos/produto';
@@ -6,6 +6,9 @@ import { ProdutosService } from 'src/app/produtos.service';
 import { Associacao } from '../associacoes';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssociacoesService } from 'src/app/associacoes.service';
+
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-associacoes-form',
@@ -26,6 +29,15 @@ export class AssociacoesFormComponent implements OnInit {
   erro!: boolean;
   erroUsuarioInvalido: boolean = false;
   id!: number;
+  isEditMode: boolean = false;
+
+
+  // Variáveis para busca de estabelecimentos
+  @ViewChild('autocompleteContainer') autocompleteContainer!: ElementRef;
+  mostrarSugestoes: boolean = false;
+  estabelecimentoInput: string = '';
+  estabelecimentosFiltrados: Estabelecimento[] = [];
+  private buscaEstabelecimentoSubject = new Subject<string>();
 
 
   constructor(
@@ -42,28 +54,95 @@ export class AssociacoesFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.estabelecimentosService.getEstabelecimentos().subscribe(response => {
-      this.estabelecimentos = response;
+    // this.estabelecimentosService.getEstabelecimentos().subscribe(response => {
+    //   this.estabelecimentos = response;
+    // });
+
+    // Setup da busca com debounce
+    this.buscaEstabelecimentoSubject.pipe(
+      debounceTime(300),
+      // distinctUntilChanged(),
+      switchMap((termo: string) => {
+        if (termo.length < 3) return [];
+        return this.estabelecimentosService.buscar(termo);
+      })
+    ).subscribe((resultados: Estabelecimento[]) => {
+      this.estabelecimentosFiltrados = resultados;
     });
+
+    // Busca estática de produtos
     this.produtosService.getProdutos().subscribe(response => {
       this.produtos = response;
     });
     this.activatedRoute.params.subscribe(params => {
       if (params && params['id']) {
         this.id = params['id'];
+        this.isEditMode = true;  // ativa modo edição
         this.service.getAssociacaoById(this.id).subscribe(
           (response) => {
             this.associacao = response;
+            if (this.associacao.estabelecimentoId) {
+              this.estabelecimentosService.getEstabelecimentoById(this.associacao.estabelecimentoId).subscribe(est => {
+                this.estabelecimentoInput = est.nomeEstabelecimento ?? '';
+              });
+            }
             // this.associacao.idUsuario = response.idUsuario;
             // console.log(this.associacao);
           },
           (errorResponse) => {
             this.associacao = new Associacao();
+            this.isEditMode = false;
           }
         );
       }
     });
   }
+
+  // Chamado a cada mudança de input
+  buscarEstabelecimentos(termo: string): void {
+    if (!termo || termo.trim().length < 3) {
+      // this.estabelecimentosFiltrados = []; // limpa a lista
+      this.carregarEstabelecimentosIniciais();
+      return;
+    }
+
+    this.buscaEstabelecimentoSubject.next(termo);
+    this.mostrarSugestoes = true;
+  }
+
+
+  // Quando seleciona um estabelecimento
+  selecionarEstabelecimento(estabelecimento: Estabelecimento): void {
+    this.associacao.estabelecimentoId = estabelecimento.id;
+    this.estabelecimentoInput = estabelecimento.nomeEstabelecimento ?? '';
+    this.estabelecimentosFiltrados = [];
+  }
+
+  carregarEstabelecimentosIniciais(): void {
+    // Busca os primeiros 10 estabelecimentos, por exemplo
+    this.estabelecimentosService.buscarPrimeiros(10).subscribe((resultados: Estabelecimento[]) => {
+      this.estabelecimentosFiltrados = resultados;
+    });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickFora(event: MouseEvent): void {
+    if (!this.autocompleteContainer.nativeElement.contains(event.target)) {
+      this.mostrarSugestoes = false;
+      this.estabelecimentosFiltrados = []; // limpa a lista
+    }
+  }
+
+  aoFocarCampoEstabelecimento(): void {
+    this.mostrarSugestoes = true;
+
+    // Somente busca os primeiros se o campo estiver vazio ou com poucos caracteres
+    if (!this.estabelecimentoInput || this.estabelecimentoInput.trim().length < 3) {
+      this.carregarEstabelecimentosIniciais();
+    }
+  }
+
+
 
   onSubmit(): void {
     console.log(this.associacao);

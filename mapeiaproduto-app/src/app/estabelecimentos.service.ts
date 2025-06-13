@@ -37,4 +37,9 @@ export class EstabelecimentosService {
     const url = this.apiUrl + "/buscar?" + httpParams.toString();
     return this.http.get<Estabelecimento[]>(url);
   }
+
+  buscarPrimeiros(limite: number) {
+  return this.http.get<Estabelecimento[]>(`${this.apiUrl}?limite=${limite}`);
+}
+
 }
