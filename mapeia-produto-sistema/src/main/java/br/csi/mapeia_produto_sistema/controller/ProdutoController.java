@@ -7,7 +7,12 @@ import br.csi.mapeia_produto_sistema.service.ProdutoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -16,6 +21,9 @@ import java.util.List;
 public class ProdutoController {
 
     private final ProdutoService produtoService;
+
+    // Caminho fixo da pasta onde os arquivos serão salvos no backend
+    private final String uploadDir = System.getProperty("user.dir") + "/uploads/";
 
     // Construtor que injeta o serviço de produto
     public ProdutoController(ProdutoService produtoService) {
@@ -90,5 +98,61 @@ public class ProdutoController {
     public ResponseEntity<List<Produto>> buscarUsuariosPorNome(@RequestParam(value = "q", required = false, defaultValue = "") String termo) {
         List<Produto> produtos = produtoService.buscarPorNome(termo);
         return ResponseEntity.ok(produtos);
+    }
+
+    //rotas relacionadas ao upload de foto do produto
+
+    @PostMapping("/upload")
+    public ResponseEntity<Produto> criarProdutoComImagem(
+            @RequestPart("produto") ProdutoDTO dto,
+            @RequestPart("imagem") MultipartFile imagem) {
+
+        try {
+            // Salvar imagem no disco
+            String caminhoImagem = salvarImagem(imagem);
+            dto.setFoto(caminhoImagem); // Define o caminho salvo no DTO
+
+            Produto novoProduto = produtoService.salvarProduto(dto);
+            return ResponseEntity.ok(novoProduto);
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PutMapping("/upload/{id}")
+    public ResponseEntity<Produto> atualizarProdutoComImagem(
+            @PathVariable Long id,
+            @RequestPart("produto") ProdutoDTO dto,
+            @RequestPart(name = "imagem", required = false) MultipartFile imagem) {
+
+        try {
+            if (imagem != null && !imagem.isEmpty()) {
+                String caminhoImagem = salvarImagem(imagem);
+                dto.setFoto(caminhoImagem);
+            }
+
+            Produto atualizado = produtoService.atualizarProduto(id, dto);
+            return ResponseEntity.ok(atualizado);
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    private String salvarImagem(MultipartFile imagem) throws IOException {
+        // Cria o diretório se não existir
+        Path diretorio = Paths.get(uploadDir);
+        if (!Files.exists(diretorio)) {
+            Files.createDirectories(diretorio);
+        }
+
+        // Gera um nome único para evitar sobrescrever arquivos
+        String nomeArquivo = System.currentTimeMillis() + "_" + imagem.getOriginalFilename();
+        Path caminhoCompleto = diretorio.resolve(nomeArquivo);
+
+        // Salva o arquivo no disco
+        imagem.transferTo(caminhoCompleto.toFile());
+
+        // Retorna o caminho relativo para armazenar no banco
+        return "/uploads/" + nomeArquivo;
     }
 }

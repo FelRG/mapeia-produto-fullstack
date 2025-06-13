@@ -23,16 +23,21 @@ export class ProdutosFormComponent implements OnInit {
   erroUsuarioInvalido: boolean = false;
   idUsuario: number = localStorage.getItem('id') ? parseInt(localStorage.getItem('id')!) : 0;
 
+  selectedFile?: File;
+
+  imagemUrl?: string;
+
+
   constructor(
     // private usuarioService: UsuariosService
     private service: ProdutosService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ){
+  ) {
     this.produto = new Produto();
     // this.produto.idUsuario = this.idUsuario;
     this.produto.ativo = 'S'; // Define ativo como 'S' por padrão
-   }
+  }
 
   ngOnInit(): void {
     // this.usuarioService.getUsuarioById(1).subscribe( response => this.usuario = response)
@@ -42,6 +47,12 @@ export class ProdutosFormComponent implements OnInit {
         this.service.getProdutoById(this.id).subscribe(
           (response) => {
             this.produto = response
+            if (this.produto.foto) {
+              this.imagemUrl = this.service.getImagemUrl(this.produto.foto) + '?t=' + new Date().getTime();
+              // this.imagemUrl = this.service.getImagemUrl(this.produto.foto);
+              // this.produto.foto = this.service.getImagemUrl(this.produto.foto);
+              // console.log(this.produto.foto);
+            }
             // this.produto.idUsuario = this.idUsuario;
           },
           (errorResponse) => (this.produto = new Produto())
@@ -59,33 +70,99 @@ export class ProdutosFormComponent implements OnInit {
 
     // this.produto.idUsuario = this.idUsuario;
     this.erroUsuarioInvalido = false; // zera erro, se passar
-    console.log(this.produto);
+
+    console.log('produto', this.produto);
+
+    const formData = new FormData();
+
+    const produtoPayload = Produto.toDTO(this.produto);
+
+    // const produtoPayload = {
+    //   ...this.produto
+    // };
+
+    if (!this.id) { // Se for criação (não tem ID ainda), atribui o usuário
+      produtoPayload.idUsuario = this.idUsuario;
+      console.log('Cadastrando novo produto com usuário:', this.idUsuario);
+    }
+
+    formData.append('produto', new Blob([JSON.stringify(produtoPayload)], {
+      type: 'application/json'
+    }));
+
+    // formData.append('produto', new Blob([JSON.stringify({
+    //   ...this.produto,
+    //   idUsuario: this.idUsuario
+    // })], { type: 'application/json' }));
+
+    if (this.selectedFile) {
+      formData.append('imagem', this.selectedFile);
+    }
 
     if (this.id) {
-      const dto = Produto.toDTO(this.produto);
-      this.service.atualizar(dto).subscribe(
+      this.service.atualizarComImagem(this.id, formData).subscribe(
         (response) => {
           this.sucess = true;
           this.err = false;
-    
+          if (this.produto.foto) {
+            this.imagemUrl = this.service.getImagemUrl(this.produto.foto) + '?t=' + new Date().getTime();
+          }
+
         }, errorResponse => {
           this.sucess = false;
           this.err = true;
         }
       );
     } else {
-      this.produto.idUsuario = this.idUsuario;
-      this.service.salvar(this.produto).subscribe(
+      this.service.salvarComImagem(formData).subscribe(
         (response) => {
           this.sucess = true;
           this.err = false;
-          this.produto = response;
+          if (this.produto.foto) {
+            this.imagemUrl = this.service.getImagemUrl(this.produto.foto) + '?t=' + new Date().getTime();
+          }
 
         }, errorResponse => {
           this.sucess = false;
           this.err = true;
         }
       );
+    }
+
+    // if (this.id) {
+    //   const dto = Produto.toDTO(this.produto);
+    //   this.service.atualizar(dto).subscribe(
+    //     (response) => {
+    //       this.sucess = true;
+    //       this.err = false;
+
+    //     }, errorResponse => {
+    //       this.sucess = false;
+    //       this.err = true;
+    //     }
+    //   );
+    // } else {
+    //   this.produto.idUsuario = this.idUsuario;
+    //   this.service.salvar(this.produto).subscribe(
+    //     (response) => {
+    //       this.sucess = true;
+    //       this.err = false;
+    //       this.produto = response;
+
+    //     }, errorResponse => {
+    //       this.sucess = false;
+    //       this.err = true;
+    //     }
+    //   );
+    // }
+
+
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
     }
   }
 

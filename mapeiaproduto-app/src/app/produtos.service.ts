@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 export class ProdutosService {
 
   private readonly apiUrl = 'http://localhost:8080/mapeia-produto-sistema/produto';
+  private readonly apiUrlBasico = 'http://localhost:8080/mapeia-produto-sistema';
 
   constructor(private http: HttpClient) { }
 
@@ -33,8 +34,23 @@ export class ProdutosService {
   }
 
   buscar(q: string): Observable<Produto[]> {
-      const httpParams = new HttpParams().set('q', q);
-      const url = this.apiUrl + "/buscar" + "?" + httpParams.toString();
-      return this.http.get<any[]>(url);
-    }
+    const httpParams = new HttpParams().set('q', q);
+    const url = this.apiUrl + "/buscar" + "?" + httpParams.toString();
+    return this.http.get<any[]>(url);
+  }
+
+  salvarComImagem(formData: FormData) {
+    return this.http.post<Produto>(`${this.apiUrl}/upload`, formData);
+  }
+
+  atualizarComImagem(id: number, formData: FormData) {
+    return this.http.put<Produto>(`${this.apiUrl}/upload/${id}`, formData);
+  }
+
+  getImagemUrl(nomeArquivo: string): string {
+    return `${this.apiUrlBasico}${nomeArquivo}`;
+  }
+
+
+
 }

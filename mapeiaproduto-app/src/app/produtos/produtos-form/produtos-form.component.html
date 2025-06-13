@@ -1,11 +1,11 @@
 <br />
 <ol class="breadcrumb mb-4">
   <li class="breadcrumb-item active">
-  Produto &gt;
-  {{
-  produto.id ? "Editar" : "Cadastrar"
-  }}
-  Produto
+    Produto &gt;
+    {{
+    produto.id ? "Editar" : "Cadastrar"
+    }}
+    Produto
   </li>
 </ol>
 
@@ -51,16 +51,24 @@
     <!-- Visualização da imagem da foto (se existir) -->
     <div class="mb-3" *ngIf="produto.foto">
       <label class="form-label d-block">Pré-visualização da Imagem</label>
-      <img [src]="produto.foto" alt="Imagem do produto" class="img-thumbnail" style="max-height: 200px;" />
+      <img *ngIf="imagemUrl" [src]="imagemUrl" alt="Imagem do produto" class="img-thumbnail" style="max-height: 200px;" />
     </div>
 
 
     <!-- Campo: Foto (como texto) -->
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label for="foto" class="form-label">Foto</label>
       <input type="text" id="foto" name="foto" class="form-control rounded-pill border border-dark"
         placeholder="Digite o link da foto do produto" [(ngModel)]="produto.foto" />
+    </div> -->
+
+    <!-- Upload de imagem -->
+    <div class="mb-3">
+      <label for="foto" class="form-label">Foto do Produto *Tamanho máximo: 20MB</label>
+      <input type="file" id="foto" class="form-control rounded-pill border border-dark"
+        (change)="onFileSelected($event)" accept="image/*" />
     </div>
+
 
     <!-- Nome do Produto -->
     <div class="mb-3">

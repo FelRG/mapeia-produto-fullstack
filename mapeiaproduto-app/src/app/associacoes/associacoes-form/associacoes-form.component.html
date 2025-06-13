@@ -49,7 +49,7 @@
 
     <!-- Campo Estabelecimento com busca -->
     <!-- Estabelecimento -->
-    <div class="mb-3 position-relative" #autocompleteContainer>
+    <!-- <div class="mb-3 position-relative" #autocompleteContainer>
       <label for="estabelecimento" class="form-label">Estabelecimento</label>
       <input id="estabelecimento" name="estabelecimentoInput" type="text"
         class="form-control rounded-pill px-3 border border-dark" [(ngModel)]="estabelecimentoInput"
@@ -63,7 +63,47 @@
           {{ est.nomeEstabelecimento }}
         </li>
       </ul>
+    </div> -->
+
+    <div class="mb-3 position-relative" #autocompleteContainer>
+      <label for="estabelecimento" class="form-label d-block">Estabelecimento</label>
+
+      <!-- Container para input + chip -->
+      <div class="d-flex flex-column gap-2">
+
+        <!-- Chip visível em modo edição, sem botão "x" -->
+        <div *ngIf="isEditMode && estabelecimentoSelecionado"
+          class="chip bg-light border border-dark d-inline-flex align-items-center px-3 py-2 rounded-pill">
+          {{ estabelecimentoSelecionado.nomeEstabelecimento }}
+        </div>
+
+        <!-- Chip com botão "x" se NÃO estiver no modo edição -->
+        <div *ngIf="!isEditMode && estabelecimentoSelecionado"
+          class="chip bg-light border border-dark d-inline-flex align-items-center px-3 py-2 rounded-pill">
+          {{ estabelecimentoSelecionado.nomeEstabelecimento }}
+          <button type="button" class="btn-close ms-2" aria-label="Remover"
+            (click)="removerEstabelecimentoSelecionado()"></button>
+        </div>
+
+        <!-- Input de busca visível apenas se não houver selecionado e não estiver no modo edição -->
+        <input *ngIf="!isEditMode && !estabelecimentoSelecionado" id="estabelecimento" name="estabelecimentoInput"
+          type="text" class="form-control rounded-pill px-3 border border-dark" [(ngModel)]="estabelecimentoInput"
+          (input)="buscarEstabelecimentos(estabelecimentoInput)" (focus)="aoFocarCampoEstabelecimento()"
+          placeholder="Digite o nome do estabelecimento..." />
+
+      </div>
+
+      <!-- Lista de sugestões visível somente no modo cadastro e sem item selecionado -->
+      <ul class="list-group position-absolute w-100"
+        *ngIf="!isEditMode && mostrarSugestoes && estabelecimentosFiltrados.length > 0 && !estabelecimentoSelecionado">
+        <li class="list-group-item" *ngFor="let est of estabelecimentosFiltrados"
+          (click)="selecionarEstabelecimento(est)">
+          {{ est.nomeEstabelecimento }}
+        </li>
+      </ul>
     </div>
+
+
 
     <!-- Produto -->
     <div class="mb-3">

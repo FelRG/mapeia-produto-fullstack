@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth->
                         auth
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers("/uploads/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/login", "/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/usuario").hasAnyAuthority("Admin", "Produtor", "Consumidor")

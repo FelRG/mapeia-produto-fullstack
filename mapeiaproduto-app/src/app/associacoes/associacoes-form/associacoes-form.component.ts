@@ -39,6 +39,10 @@ export class AssociacoesFormComponent implements OnInit {
   estabelecimentosFiltrados: Estabelecimento[] = [];
   private buscaEstabelecimentoSubject = new Subject<string>();
 
+  // Variável para funcionalidade do chip
+  estabelecimentoSelecionado: Estabelecimento | null = null;
+
+
 
   constructor(
     private service: AssociacoesService,
@@ -84,6 +88,7 @@ export class AssociacoesFormComponent implements OnInit {
             if (this.associacao.estabelecimentoId) {
               this.estabelecimentosService.getEstabelecimentoById(this.associacao.estabelecimentoId).subscribe(est => {
                 this.estabelecimentoInput = est.nomeEstabelecimento ?? '';
+                this.estabelecimentoSelecionado = est; // <- Adicione isso
               });
             }
             // this.associacao.idUsuario = response.idUsuario;
@@ -112,11 +117,24 @@ export class AssociacoesFormComponent implements OnInit {
 
 
   // Quando seleciona um estabelecimento
+  // selecionarEstabelecimento(estabelecimento: Estabelecimento): void {
+  //   this.associacao.estabelecimentoId = estabelecimento.id;
+  //   this.estabelecimentoInput = estabelecimento.nomeEstabelecimento ?? '';
+  //   this.estabelecimentosFiltrados = [];
+  // }
+
   selecionarEstabelecimento(estabelecimento: Estabelecimento): void {
     this.associacao.estabelecimentoId = estabelecimento.id;
-    this.estabelecimentoInput = estabelecimento.nomeEstabelecimento ?? '';
-    this.estabelecimentosFiltrados = [];
+    this.estabelecimentoSelecionado = estabelecimento;
+    this.estabelecimentoInput = ''; // limpa o input
+    this.mostrarSugestoes = false;
   }
+
+  removerEstabelecimentoSelecionado(): void {
+    this.associacao.estabelecimentoId = 0;
+    this.estabelecimentoSelecionado = null;
+  }
+
 
   carregarEstabelecimentosIniciais(): void {
     // Busca os primeiros 10 estabelecimentos, por exemplo
