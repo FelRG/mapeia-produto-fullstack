@@ -16,30 +16,33 @@ export class UsuariosListaComponent implements OnInit {
   usuarioSelecionado!: Usuario;
   mensagemSucesso!: string;
   mensagemErro!: string;
-  q! : string;
+  q!: string;
   // lista!: UsuariosBusca[];
   messagemErroBusca!: string;
   contaAtualId: number = Number(localStorage.getItem('id')) || 0;
 
+  paginaAtual: number = 1;
+  tamanhoPagina: number = 5;
+
 
 
   constructor(
-    private service: UsuariosService, 
-    private router: Router) {}
+    private service: UsuariosService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.service.getUsuarios().subscribe(resposta => this.usuarios = resposta);
   }
 
-  novoCadastro(){
+  novoCadastro() {
     this.router.navigate(['/usuarios/form']);
   }
 
-  preparaDelecao(usuario: Usuario){
+  preparaDelecao(usuario: Usuario) {
     this.usuarioSelecionado = usuario;
   }
 
-  deletarUsuario(){
+  deletarUsuario() {
     console.log(this.usuarioSelecionado);
     this.service.deletar(this.usuarioSelecionado).subscribe(
       response => {
@@ -50,24 +53,34 @@ export class UsuariosListaComponent implements OnInit {
     )
   }
 
-  consultar(){
-    if(this.q == undefined || this.q == null || this.q.trim() == '') {
+  consultar() {
+    if (this.q == undefined || this.q == null || this.q.trim() == '') {
       this.ngOnInit();
       this.messagemErroBusca = '';
       return;
     }
     // this.service.buscar(this.q).subscribe(response => this.lista = response);
     this.service.buscar(this.q)
-    .subscribe(
-      response => {
-        this.usuarios = response
-        if (this.usuarios.length <= 0) {
-          this.messagemErroBusca = 'Nenhum usuario encontrado com esse nome.';
-        } else {
-          this.messagemErroBusca = '';
-        }
-      }, 
-    );
+      .subscribe(
+        response => {
+          this.usuarios = response
+          if (this.usuarios.length <= 0) {
+            this.messagemErroBusca = 'Nenhum usuario encontrado com esse nome.';
+          } else {
+            this.messagemErroBusca = '';
+          }
+        },
+      );
+  }
+
+  get usuariosPaginados(): Usuario[] {
+    const inicio = (this.paginaAtual - 1) * this.tamanhoPagina;
+    const fim = inicio + this.tamanhoPagina;
+    return this.usuarios.slice(inicio, fim);
+  }
+
+  get totalPaginas(): number {
+    return Math.ceil(this.usuarios.length / this.tamanhoPagina);
   }
 
 }

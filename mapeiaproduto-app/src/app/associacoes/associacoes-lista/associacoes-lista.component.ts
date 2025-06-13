@@ -22,6 +22,9 @@ export class AssociacoesListaComponent implements OnInit {
   q!: string;
   messagemErroBusca!: string;
 
+  paginaAtual: number = 1;
+  tamanhoPagina: number = 5;
+
   constructor(
     private service: AssociacoesService,
     private produtosService: ProdutosService,
@@ -87,6 +90,16 @@ export class AssociacoesListaComponent implements OnInit {
           : '';
       }
     );
+  }
+
+  get associacoesPaginadas(): Associacao[] {
+    const inicio = (this.paginaAtual - 1) * this.tamanhoPagina;
+    const fim = inicio + this.tamanhoPagina;
+    return this.associacoes.slice(inicio, fim);
+  }
+
+  get totalPaginas(): number {
+    return Math.ceil(this.associacoes.length / this.tamanhoPagina);
   }
 
 }

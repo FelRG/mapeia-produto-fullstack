@@ -18,9 +18,12 @@ export class ProdutosListaComponent implements OnInit {
   q!: string;
   messagemErroBusca!: string;
 
+  paginaAtual: number = 1;
+  tamanhoPagina: number = 5;
+
   constructor(
-    private service: ProdutosService, 
-    private router: Router) {}
+    private service: ProdutosService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.service.getProdutos().subscribe(resposta => this.produtos = resposta);
@@ -62,6 +65,16 @@ export class ProdutosListaComponent implements OnInit {
           }
         }
       );
+  }
+
+  get produtosPaginados(): Produto[] {
+    const inicio = (this.paginaAtual - 1) * this.tamanhoPagina;
+    const fim = inicio + this.tamanhoPagina;
+    return this.produtos.slice(inicio, fim);
+  }
+
+  get totalPaginas(): number {
+    return Math.ceil(this.produtos.length / this.tamanhoPagina);
   }
 
 

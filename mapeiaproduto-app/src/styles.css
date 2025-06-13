@@ -109,3 +109,30 @@
     .info {
       margin: 16px 0;
     }
+
+    /* Estilo da paginação em cinza escuro */
+    .pagination .page-link {
+      color: #444;
+      /* texto cinza escuro */
+      background-color: #f8f9fa;
+      /* cor de fundo suave */
+      border: 1px solid #aaa;
+      transition: all 0.2s ease;
+    }
+
+    .pagination .page-link:hover {
+      background-color: #ddd;
+      color: #000;
+    }
+
+    .pagination .page-item.active .page-link {
+      background-color: #8a8a8a;
+      color: white;
+      border-color: #8a8a8a;
+    }
+
+    .pagination .page-item.disabled .page-link {
+      color: #999;
+      background-color: #e9ecef;
+      border-color: #ddd;
+    }

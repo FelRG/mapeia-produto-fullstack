@@ -17,10 +17,13 @@ export class EstabelecimentoListaComponent implements OnInit {
   q!: string;
   messagemErroBusca!: string;
 
+  paginaAtual: number = 1;
+  tamanhoPagina: number = 5;
+
   constructor(
     private service: EstabelecimentosService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.service.getEstabelecimentos().subscribe(resposta => this.estabelecimentos = resposta);
@@ -59,5 +62,15 @@ export class EstabelecimentoListaComponent implements OnInit {
           : '';
       }
     );
+  }
+
+  get estabelecimentosPaginados(): Estabelecimento[] {
+    const inicio = (this.paginaAtual - 1) * this.tamanhoPagina;
+    const fim = inicio + this.tamanhoPagina;
+    return this.estabelecimentos.slice(inicio, fim);
+  }
+
+  get totalPaginas(): number {
+    return Math.ceil(this.estabelecimentos.length / this.tamanhoPagina);
   }
 }
