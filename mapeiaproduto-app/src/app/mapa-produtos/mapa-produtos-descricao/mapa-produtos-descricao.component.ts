@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 import { AssociacoesService } from '../../associacoes.service';
 import { ProdutosService } from '../../produtos.service';
 import { EstabelecimentosService } from '../../estabelecimentos.service';
-import { UsuariosService } from '../../usuarios.service'; // supondo que você tenha esse service
+import { UsuariosService } from '../../usuarios.service';
 
 @Component({
   selector: 'app-mapa-produtos-descricao',

@@ -33,15 +33,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth->
                         auth
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-//                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/login", "/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
-                                //.requestMatchers(HttpMethod.GET, "/cliente").hasAuthority("ROLE_ADMIN")
-//                                .requestMatchers(HttpMethod.GET, "/cliente").hasAnyAuthority("ROLE_CLIENTE", "ROLE_ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/usuario").hasAnyAuthority("Admin", "Produtor", "Consumidor")
-                                .requestMatchers(HttpMethod.GET, "/produto").hasAnyAuthority("Admin", "Produtor", "Consumidor")
-                                .requestMatchers(HttpMethod.GET, "/estabelecimento").hasAnyAuthority("Admin", "Produtor", "Consumidor")
-                                .requestMatchers(HttpMethod.GET, "/associacao").hasAnyAuthority("Admin", "Produtor", "Consumidor")
+                                .requestMatchers(HttpMethod.GET,"/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/usuario").hasAnyAuthority("Admin", "Produtor", "Consumidor")
+//                                .requestMatchers(HttpMethod.GET, "/produto").hasAnyAuthority("Admin", "Produtor", "Consumidor")
+//                                .requestMatchers(HttpMethod.GET, "/estabelecimento").hasAnyAuthority("Admin", "Produtor", "Consumidor")
+//                                .requestMatchers(HttpMethod.GET, "/associacao").hasAnyAuthority("Admin", "Produtor", "Consumidor")
                                 .requestMatchers(HttpMethod.PUT, "/usuario").hasAnyAuthority("Admin", "Produtor", "Consumidor")
                                 .requestMatchers(HttpMethod.PUT, "/produto").hasAnyAuthority("Admin", "Produtor", "Consumidor")
                                 .requestMatchers(HttpMethod.PUT, "/estabelecimento").hasAnyAuthority("Admin", "Produtor", "Consumidor")

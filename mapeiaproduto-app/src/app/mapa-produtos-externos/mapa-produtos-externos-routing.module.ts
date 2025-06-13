@@ -8,7 +8,7 @@ const routes: Routes = [
   {path: 'mapa-produtos-externos', component: LayoutComponent, children: [
           {path: 'form', component: MapaProdutosExternosFormComponent},
           // {path: 'form/:id', component: MapaProdutosFormComponent},
-          {path: 'descricao', component: MapaProdutosExternosDescricaoComponent},
+          {path: 'descricao/:id', component: MapaProdutosExternosDescricaoComponent},
           {path: '', redirectTo: '/mapa-produtos-externos/form', pathMatch: 'full'},
         ]},
 ];

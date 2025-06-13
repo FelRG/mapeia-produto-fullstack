@@ -1,1 +1,37 @@
-<p>mapa-produtos-externos-descricao works!</p>
+<br>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">
+        <a routerLink="/mapa-produtos-externos">Mapa dos Produtos</a> &gt; Descrição Produto
+    </li>
+</ol>
+
+<div class="container pb-4" *ngIf="produto && estabelecimento && usuario">
+    <div class="containerdescricao">
+        <h2>{{ produto.nomeProduto }} ({{ produto.marca }})</h2>
+
+        <div class="subtitle">
+            <span>{{ estabelecimento.nomeEstabelecimento }}</span>
+            <span>{{ estabelecimento.categoria }}</span>
+        </div>
+
+        <div class="info">
+            <div>
+                <i class="bi bi-geo-alt"></i>
+                <span>
+                    {{ estabelecimento.endereco }}, {{ estabelecimento.numero }}
+                    <ng-container *ngIf="estabelecimento.complemento">, {{ estabelecimento.complemento }}</ng-container>
+                    - {{ estabelecimento.cidade }}/{{ estabelecimento.estado }}
+                </span>
+            </div>
+
+            <div><i class="bi bi-telephone"></i>
+                {{ usuario.telefone }}</div>
+            <div><i class="bi bi-envelope"></i>
+                {{ usuario.email }}</div>
+        </div>
+
+        <div class="mb-3" *ngIf="produto.foto">
+            <img [src]="produto.foto" alt="Imagem do produto" class="img-thumbnail" style="max-height: 200px;" />
+        </div>
+    </div>
+</div>
