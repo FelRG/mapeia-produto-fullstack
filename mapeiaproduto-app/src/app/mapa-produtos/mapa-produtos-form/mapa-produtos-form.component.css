@@ -1,0 +1,9 @@
+.position-relative {
+  position: relative;
+}
+
+.list-group.position-absolute {
+  z-index: 1000;
+  background-color: white; /* garante opacidade */
+  border: 1px solid #ccc;
+}
