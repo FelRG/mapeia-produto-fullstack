@@ -32,6 +32,8 @@ public class AssociacaoMapper {
                 .estabelecimentoId(a.getEstabelecimento().getId())
                 .ativo(a.getAtivo())
                 .datacadastro(a.getDatacadastro())
+                .nomeProduto(a.getProduto().getNomeProduto())
+                .nomeEstabelecimento(a.getEstabelecimento().getNomeEstabelecimento())
                 .build();
     }
 }

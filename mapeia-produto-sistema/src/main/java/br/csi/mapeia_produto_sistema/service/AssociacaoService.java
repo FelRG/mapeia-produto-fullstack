@@ -81,6 +81,13 @@ public class AssociacaoService {
                 .map(AssociacaoMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public List<AssociacaoDTO> buscarPorNome(String nome) {
+        return associacaoRepository.buscarPorNomeEstabelecimentoOuProduto(nome)
+                .stream()
+                .map(AssociacaoMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }
 
 

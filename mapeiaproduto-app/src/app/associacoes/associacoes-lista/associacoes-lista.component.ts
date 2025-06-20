@@ -75,6 +75,23 @@ export class AssociacoesListaComponent implements OnInit {
     );
   }
 
+  // consultar() {
+  //   if (!this.q || this.q.trim() === '') {
+  //     this.ngOnInit();
+  //     this.messagemErroBusca = '';
+  //     return;
+  //   }
+
+  //   this.service.buscar(this.q).subscribe(
+  //     resposta => {
+  //       this.associacoes = resposta;
+  //       this.messagemErroBusca = this.associacoes.length === 0
+  //         ? 'Nenhuma associação encontrada.'
+  //         : '';
+  //     }
+  //   );
+  // }
+
   consultar() {
     if (!this.q || this.q.trim() === '') {
       this.ngOnInit();
@@ -82,15 +99,27 @@ export class AssociacoesListaComponent implements OnInit {
       return;
     }
 
-    this.service.buscar(this.q).subscribe(
-      resposta => {
-        this.associacoes = resposta;
-        this.messagemErroBusca = this.associacoes.length === 0
-          ? 'Nenhuma associação encontrada.'
-          : '';
-      }
-    );
+    forkJoin({
+      associacoes: this.service.buscar(this.q),
+      produtos: this.produtosService.getProdutos(),
+      estabelecimentos: this.estabelecimentosService.getEstabelecimentos()
+    }).subscribe(({ associacoes, produtos, estabelecimentos }) => {
+      this.associacoes = associacoes.map(assoc => {
+        const produto = produtos.find(p => p.id === assoc.produtoId);
+        const estabelecimento = estabelecimentos.find(e => e.id === assoc.estabelecimentoId);
+        return {
+          ...assoc,
+          produtoNome: produto ? produto.nomeProduto : 'Produto não encontrado',
+          estabelecimentoNome: estabelecimento ? estabelecimento.nomeEstabelecimento : 'Estabelecimento não encontrado'
+        };
+      });
+
+      this.messagemErroBusca = this.associacoes.length === 0
+        ? 'Nenhuma associação encontrada.'
+        : '';
+    });
   }
+
 
   get associacoesPaginadas(): Associacao[] {
     const inicio = (this.paginaAtual - 1) * this.tamanhoPagina;

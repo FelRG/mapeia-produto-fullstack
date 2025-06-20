@@ -19,4 +19,7 @@ public class AssociacaoDTO {
 
     private String ativo;
     private Date datacadastro;
+
+    private String nomeProduto;
+    private String nomeEstabelecimento;
 }

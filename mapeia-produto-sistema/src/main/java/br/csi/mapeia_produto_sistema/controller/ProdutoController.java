@@ -96,7 +96,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/buscar")
-    public ResponseEntity<List<Produto>> buscarUsuariosPorNome(@RequestParam(value = "q", required = false, defaultValue = "") String termo) {
+    public ResponseEntity<List<Produto>> buscarProdutosPorNome(@RequestParam(value = "q", required = false, defaultValue = "") String termo) {
         List<Produto> produtos = produtoService.buscarPorNome(termo);
         return ResponseEntity.ok(produtos);
     }

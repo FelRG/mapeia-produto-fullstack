@@ -1,6 +1,7 @@
 package br.csi.mapeia_produto_sistema.controller;
 
 import br.csi.mapeia_produto_sistema.dto.AssociacaoDTO;
+import br.csi.mapeia_produto_sistema.model.Produto;
 import br.csi.mapeia_produto_sistema.service.AssociacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,12 @@ public class AssociacaoController {
     @GetMapping("/produto/{produtoId}")
     public ResponseEntity<List<AssociacaoDTO>> getByProdutoId(@PathVariable Long produtoId) {
         List<AssociacaoDTO> associacoes = associacaoService.getByProdutoId(produtoId);
+        return ResponseEntity.ok(associacoes);
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<AssociacaoDTO>> buscarAssociacoesPorNome(@RequestParam(value = "q", required = false, defaultValue = "") String termo) {
+        List<AssociacaoDTO> associacoes = associacaoService.buscarPorNome(termo);
         return ResponseEntity.ok(associacoes);
     }
 

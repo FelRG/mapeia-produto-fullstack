@@ -29,6 +29,23 @@
     </button>
   </div> -->
 
+  <!-- Campo de Busca com estilo moderno e funcionalidades Angular -->
+<form #consultaForm="ngForm" (submit)="consultar()" class="mb-4">
+  <div class="d-flex">
+    <input
+      type="text"
+      [(ngModel)]="q"
+      name="q"
+      id="inputq"
+      class="form-control rounded-pill border border-dark me-2"
+      placeholder="Digite o nome do produto ou estabelecimento..."
+    />
+    <button type="submit" class="btn btn-outline-dark rounded-pill px-4 btn-search">
+      <i class="bi bi-search"></i>
+    </button>
+  </div>
+</form>
+
   <div>
     <div class="alert alert-warning" role="alert" *ngIf="messagemErroBusca">
       {{ messagemErroBusca }}
