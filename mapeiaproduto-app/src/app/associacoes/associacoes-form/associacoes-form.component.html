@@ -106,14 +106,45 @@
 
 
     <!-- Produto -->
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label for="produto" class="form-label">Produto</label>
       <select class="form-select rounded-pill px-3 border border-dark" id="produto" name="produto"
         [(ngModel)]="associacao.produtoId">
         <option value="0" disabled selected>Selecione um Produto...</option>
         <option *ngFor="let produto of produtos" [value]="produto.id">{{ produto.nomeProduto }}</option>
       </select>
+    </div> -->
+
+    <div class="mb-3 position-relative" #autocompleteProdutoContainer>
+      <label for="produto" class="form-label d-block">Produto</label>
+
+      <div class="d-flex flex-column gap-2">
+        <div *ngIf="isEditMode && produtoSelecionado"
+          class="chip bg-light border border-dark d-inline-flex align-items-center px-3 py-2 rounded-pill">
+          {{ produtoSelecionado.nomeProduto }}
+        </div>
+
+        <div *ngIf="!isEditMode && produtoSelecionado"
+          class="chip bg-light border border-dark d-inline-flex align-items-center px-3 py-2 rounded-pill">
+          {{ produtoSelecionado.nomeProduto }}
+          <button type="button" class="btn-close ms-2" aria-label="Remover"
+            (click)="removerProdutoSelecionado()"></button>
+        </div>
+
+        <input *ngIf="!isEditMode && !produtoSelecionado" id="produto" name="produtoInput" type="text"
+          class="form-control rounded-pill px-3 border border-dark" [(ngModel)]="produtoInput"
+          (input)="buscarProdutos(produtoInput)" (focus)="aoFocarCampoProduto()"
+          placeholder="Digite o nome do produto..." />
+      </div>
+
+      <ul class="list-group position-absolute w-100"
+        *ngIf="!isEditMode && mostrarSugestoesProduto && produtosFiltrados.length > 0 && !produtoSelecionado">
+        <li class="list-group-item" *ngFor="let prod of produtosFiltrados" (click)="selecionarProduto(prod)">
+          {{ prod.nomeProduto }}
+        </li>
+      </ul>
     </div>
+
 
     <!-- Está ativo? -->
     <div class="mb-3" *ngIf="associacao.id">

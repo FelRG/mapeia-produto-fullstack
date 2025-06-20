@@ -38,10 +38,15 @@ export class AssociacoesFormComponent implements OnInit {
   estabelecimentoInput: string = '';
   estabelecimentosFiltrados: Estabelecimento[] = [];
   private buscaEstabelecimentoSubject = new Subject<string>();
+  estabelecimentoSelecionado: Estabelecimento | null = null; // Variável para funcionalidade do chip
 
-  // Variável para funcionalidade do chip
-  estabelecimentoSelecionado: Estabelecimento | null = null;
-
+  // Produto (busca com chip)
+  @ViewChild('autocompleteProdutoContainer') autocompleteProdutoContainer!: ElementRef;
+  mostrarSugestoesProduto: boolean = false;
+  produtoInput: string = '';
+  produtosFiltrados: Produto[] = [];
+  private buscaProdutoSubject = new Subject<string>();
+  produtoSelecionado: Produto | null = null; // Variável para funcionalidade do chip
 
 
   constructor(
@@ -75,9 +80,22 @@ export class AssociacoesFormComponent implements OnInit {
     });
 
     // Busca estática de produtos
-    this.produtosService.getProdutos().subscribe(response => {
-      this.produtos = response;
+    // this.produtosService.getProdutos().subscribe(response => {
+    //   this.produtos = response;
+    // });
+
+    // Setup da busca de produtos com debounce
+    this.buscaProdutoSubject.pipe(
+      debounceTime(300),
+      switchMap((termo: string) => {
+        if (termo.length < 3) return [];
+        return this.produtosService.buscar(termo); // precisa ter esse método no serviço
+      })
+    ).subscribe((resultados: Produto[]) => {
+      this.produtosFiltrados = resultados;
     });
+
+
     this.activatedRoute.params.subscribe(params => {
       if (params && params['id']) {
         this.id = params['id'];
@@ -91,6 +109,14 @@ export class AssociacoesFormComponent implements OnInit {
                 this.estabelecimentoSelecionado = est; // <- Adicione isso
               });
             }
+
+            if (this.associacao.produtoId) {
+              this.produtosService.getProdutoById(this.associacao.produtoId).subscribe(prod => {
+                this.produtoInput = prod.nomeProduto ?? '';
+                this.produtoSelecionado = prod;
+              });
+            }
+
             // this.associacao.idUsuario = response.idUsuario;
             // console.log(this.associacao);
           },
@@ -110,11 +136,18 @@ export class AssociacoesFormComponent implements OnInit {
       this.carregarEstabelecimentosIniciais();
       return;
     }
-
     this.buscaEstabelecimentoSubject.next(termo);
     this.mostrarSugestoes = true;
   }
 
+  buscarProdutos(termo: string): void {
+    if (!termo || termo.trim().length < 3) {
+      this.carregarProdutosIniciais();
+      return;
+    }
+    this.buscaProdutoSubject.next(termo);
+    this.mostrarSugestoesProduto = true;
+  }
 
   // Quando seleciona um estabelecimento
   // selecionarEstabelecimento(estabelecimento: Estabelecimento): void {
@@ -130,9 +163,21 @@ export class AssociacoesFormComponent implements OnInit {
     this.mostrarSugestoes = false;
   }
 
+  selecionarProduto(produto: Produto): void {
+    this.associacao.produtoId = produto.id;
+    this.produtoSelecionado = produto;
+    this.produtoInput = '';
+    this.mostrarSugestoesProduto = false;
+  }
+
   removerEstabelecimentoSelecionado(): void {
     this.associacao.estabelecimentoId = 0;
     this.estabelecimentoSelecionado = null;
+  }
+
+  removerProdutoSelecionado(): void {
+    this.associacao.produtoId = 0;
+    this.produtoSelecionado = null;
   }
 
 
@@ -143,11 +188,21 @@ export class AssociacoesFormComponent implements OnInit {
     });
   }
 
+  carregarProdutosIniciais(): void {
+    this.produtosService.buscarPrimeiros(10).subscribe((resultados: Produto[]) => {
+      this.produtosFiltrados = resultados;
+    });
+  }
+
   @HostListener('document:click', ['$event'])
   onClickFora(event: MouseEvent): void {
     if (!this.autocompleteContainer.nativeElement.contains(event.target)) {
       this.mostrarSugestoes = false;
       this.estabelecimentosFiltrados = []; // limpa a lista
+    }
+    if (!this.autocompleteProdutoContainer.nativeElement.contains(event.target)) {
+      this.mostrarSugestoesProduto = false;
+      this.produtosFiltrados = [];
     }
   }
 
@@ -159,6 +214,16 @@ export class AssociacoesFormComponent implements OnInit {
       this.carregarEstabelecimentosIniciais();
     }
   }
+
+  aoFocarCampoProduto(): void {
+    this.mostrarSugestoesProduto = true;
+
+    // Somente busca os primeiros se o campo estiver vazio ou com poucos caracteres
+    if (!this.produtoInput || this.produtoInput.trim().length < 3) {
+      this.carregarProdutosIniciais();
+    }
+  }
+
 
 
 

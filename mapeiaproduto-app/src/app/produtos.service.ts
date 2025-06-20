@@ -39,6 +39,10 @@ export class ProdutosService {
     return this.http.get<any[]>(url);
   }
 
+  buscarPrimeiros(limite: number) {
+    return this.http.get<Produto[]>(`${this.apiUrl}?limite=${limite}`);
+  }
+
   salvarComImagem(formData: FormData) {
     return this.http.post<Produto>(`${this.apiUrl}/upload`, formData);
   }

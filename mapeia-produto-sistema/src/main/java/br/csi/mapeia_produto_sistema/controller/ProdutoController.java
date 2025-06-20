@@ -1,6 +1,7 @@
 package br.csi.mapeia_produto_sistema.controller;
 
 import br.csi.mapeia_produto_sistema.dto.ProdutoDTO;
+import br.csi.mapeia_produto_sistema.model.Estabelecimento;
 import br.csi.mapeia_produto_sistema.model.Produto;
 import br.csi.mapeia_produto_sistema.model.Usuario;
 import br.csi.mapeia_produto_sistema.service.ProdutoService;
@@ -97,6 +98,12 @@ public class ProdutoController {
     @GetMapping("/buscar")
     public ResponseEntity<List<Produto>> buscarUsuariosPorNome(@RequestParam(value = "q", required = false, defaultValue = "") String termo) {
         List<Produto> produtos = produtoService.buscarPorNome(termo);
+        return ResponseEntity.ok(produtos);
+    }
+
+    @GetMapping(params = "limite")
+    public ResponseEntity<List<Produto>> buscarPrimeiros(@RequestParam("limite") int limite) {
+        List<Produto> produtos = produtoService.buscarPrimeiros(limite);
         return ResponseEntity.ok(produtos);
     }
 

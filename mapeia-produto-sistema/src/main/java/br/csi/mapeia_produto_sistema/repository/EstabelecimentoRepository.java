@@ -11,5 +11,4 @@ public interface EstabelecimentoRepository extends JpaRepository<Estabelecimento
     List<Estabelecimento> findByNomeEstabelecimentoContainingIgnoreCase(String nome);
     @Query(value = "SELECT * FROM estabelecimento ORDER BY nomeestabelecimento ASC LIMIT :limite", nativeQuery = true)
     List<Estabelecimento> findTopN(@Param("limite") int limite);
-
 }

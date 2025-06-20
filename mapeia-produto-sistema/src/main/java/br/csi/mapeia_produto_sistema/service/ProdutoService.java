@@ -127,4 +127,8 @@ public class ProdutoService {
     public List<Produto> buscarPorNome(String nome) {
         return repository.findByNomeProdutoContainingIgnoreCase(nome);
     }
+
+    public List<Produto> buscarPrimeiros(int limite) {
+        return repository.findTopN(limite);
+    }
 }

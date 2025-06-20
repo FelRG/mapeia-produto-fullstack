@@ -39,7 +39,7 @@ export class EstabelecimentosService {
   }
 
   buscarPrimeiros(limite: number) {
-  return this.http.get<Estabelecimento[]>(`${this.apiUrl}?limite=${limite}`);
-}
+    return this.http.get<Estabelecimento[]>(`${this.apiUrl}?limite=${limite}`);
+  }
 
 }
