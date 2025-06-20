@@ -35,7 +35,31 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/uploads/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/login", "/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
+//                                .requestMatchers(HttpMethod.GET,
+//                                        "/produto/buscar",
+//                                        "/produto/**",
+//                                        "/estabelecimento/{id}",
+//                                        "/estabelecimento/buscar",
+//                                        "/estabelecimento**",
+//                                        "/associacao/produto/**",
+//                                        "/associacao/{id}"
+//                                ).permitAll()
+//                                .requestMatchers(HttpMethod.GET,"/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
+                                .requestMatchers(HttpMethod.GET,
+                                        "/usuario",
+                                        "/usuario/{id}",
+                                        "/produto",
+                                        "/estabelecimento",
+                                        "/associacao",
+                                        "/produto/buscar",
+                                        "/produto/**",
+                                        "/produto/{id}",
+                                        "/estabelecimento/{id}",
+                                        "/estabelecimento/buscar",
+                                        "/estabelecimento**",
+                                        "/associacao/produto/**",
+                                        "/associacao/{id}"
+                                ).permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/usuario").hasAnyAuthority("Admin", "Produtor", "Consumidor")
 //                                .requestMatchers(HttpMethod.GET, "/produto").hasAnyAuthority("Admin", "Produtor", "Consumidor")
 //                                .requestMatchers(HttpMethod.GET, "/estabelecimento").hasAnyAuthority("Admin", "Produtor", "Consumidor")

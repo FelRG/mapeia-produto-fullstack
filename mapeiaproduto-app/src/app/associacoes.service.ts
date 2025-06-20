@@ -39,7 +39,7 @@ export class AssociacoesService {
   }
 
   buscarPorProduto(produtoId: number): Observable<Associacao[]> {
-  return this.http.get<Associacao[]>(`${this.apiUrl}/produto/${produtoId}`);
-}
+    return this.http.get<Associacao[]>(`${this.apiUrl}/produto/${produtoId}`);
+  }
 
 }

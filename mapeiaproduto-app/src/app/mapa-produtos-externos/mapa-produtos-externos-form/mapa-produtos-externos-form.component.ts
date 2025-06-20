@@ -1,8 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild, NgZone } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, NgZone, HostListener } from '@angular/core';
 import { ProdutosService } from '../../produtos.service'
 import { AssociacoesService } from '../../associacoes.service';
 import { EstabelecimentosService } from '../../estabelecimentos.service';
 import { GeocodingService } from '../../geocoding.service';
+import { Produto } from 'src/app/produtos/produto';
+import { debounceTime, Subject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-mapa-produtos-externos-form',
@@ -10,9 +12,17 @@ import { GeocodingService } from '../../geocoding.service';
   styleUrls: ['./mapa-produtos-externos-form.component.css']
 })
 export class MapaProdutosExternosFormComponent implements OnInit {
-@ViewChild('mapa', { static: true }) mapaElemento!: ElementRef;
+  @ViewChild('mapa', { static: true }) mapaElemento!: ElementRef;
   nomeProduto: string = '';
   map!: google.maps.Map;
+
+  // Produto (busca com chip)
+  @ViewChild('autocompleteProdutoContainer') autocompleteProdutoContainer!: ElementRef;
+  mostrarSugestoesProduto: boolean = false;
+  produtoInput: string = '';
+  produtosFiltrados: Produto[] = [];
+  private buscaProdutoSubject = new Subject<string>();
+  produtoSelecionado: Produto | null = null; // Variável para funcionalidade do chip
 
   constructor(
     private produtoService: ProdutosService,
@@ -24,6 +34,17 @@ export class MapaProdutosExternosFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initMap();
+
+    // Setup da busca de produtos com debounce
+    this.buscaProdutoSubject.pipe(
+      debounceTime(300),
+      switchMap((termo: string) => {
+        if (termo.length < 3) return [];
+        return this.produtoService.buscar(termo); // precisa ter esse método no serviço
+      })
+    ).subscribe((resultados: Produto[]) => {
+      this.produtosFiltrados = resultados;
+    });
   }
 
   initMap(): void {
@@ -113,6 +134,51 @@ export class MapaProdutosExternosFormComponent implements OnInit {
         });
       });
     });
+  }
+
+  // Método para buscar produtos com debounce
+  buscarProdutos(termo: string): void {
+    if (!termo || termo.trim().length < 3) {
+      this.carregarProdutosIniciais();
+      return;
+    }
+    this.buscaProdutoSubject.next(termo);
+    this.mostrarSugestoesProduto = true;
+  }
+
+  selecionarProduto(prod: Produto): void {
+    this.produtoSelecionado = prod;
+    this.nomeProduto = prod.nomeProduto ?? '';
+    this.produtosFiltrados = [];
+    this.mostrarSugestoesProduto = false;
+  }
+
+  removerProdutoSelecionado(): void {
+    this.produtoSelecionado = null;
+    this.nomeProduto = '';
+  }
+
+  carregarProdutosIniciais(): void {
+    this.produtoService.buscarPrimeiros(10).subscribe((resultados: Produto[]) => {
+      this.produtosFiltrados = resultados;
+    });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickFora(event: MouseEvent): void {
+    if (!this.autocompleteProdutoContainer.nativeElement.contains(event.target)) {
+      this.mostrarSugestoesProduto = false;
+      this.produtosFiltrados = [];
+    }
+  }
+
+  aoFocarCampoProduto(): void {
+    this.mostrarSugestoesProduto = true;
+
+    // Somente busca os primeiros se o campo estiver vazio ou com poucos caracteres
+    if (!this.produtoInput || this.produtoInput.trim().length < 3) {
+      this.carregarProdutosIniciais();
+    }
   }
 
 

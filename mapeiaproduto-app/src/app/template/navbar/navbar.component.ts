@@ -55,7 +55,8 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.authService.encerrarSessao();
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
+    this.router.navigate(['/mapa-produtos-externos']);
   }
 
   preparaDelecao(usuarioid: number | undefined) {

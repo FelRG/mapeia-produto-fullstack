@@ -19,6 +19,8 @@ export class MapaProdutosExternosDescricaoComponent implements OnInit {
   estabelecimento: any;
   usuario: any;
 
+  imagemUrl?: string;
+
   constructor(
     private route: ActivatedRoute,
     private associacoesService: AssociacoesService,
@@ -44,6 +46,9 @@ export class MapaProdutosExternosDescricaoComponent implements OnInit {
       usuario: this.usuariosService.getUsuarioById(usuarioId)
     }).subscribe(({ produto, estabelecimento, usuario }) => {
       this.produto = produto;
+      if (this.produto.foto) {
+          this.imagemUrl = this.produtosService.getImagemUrl(this.produto.foto);
+        }
       this.estabelecimento = estabelecimento;
       this.usuario = usuario;
     });
