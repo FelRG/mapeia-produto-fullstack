@@ -30,8 +30,14 @@
                 {{ usuario.email }}</div>
         </div>
 
-        <div class="mb-3" *ngIf="produto.foto">
+        <!-- <div class="mb-3" *ngIf="produto.foto">
             <img [src]="produto.foto" alt="Imagem do produto" class="img-thumbnail" style="max-height: 200px;" />
+        </div> -->
+
+        <div class="mb-3" *ngIf="imagemUrl">
+            <img *ngIf="imagemUrl" [src]="imagemUrl" alt="Imagem do produto" class="img-thumbnail"
+                style="max-height: 200px;" />
         </div>
+
     </div>
 </div>

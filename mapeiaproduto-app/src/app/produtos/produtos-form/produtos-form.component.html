@@ -49,7 +49,12 @@
     </div> -->
 
     <!-- Visualização da imagem da foto (se existir) -->
-    <div class="mb-3" *ngIf="produto.foto">
+    <!-- <div class="mb-3" *ngIf="produto.foto">
+      <label class="form-label d-block">Pré-visualização da Imagem</label>
+      <img *ngIf="imagemUrl" [src]="imagemUrl" alt="Imagem do produto" class="img-thumbnail" style="max-height: 200px;" />
+    </div> -->
+
+    <div class="mb-3" *ngIf="imagemUrl">
       <label class="form-label d-block">Pré-visualização da Imagem</label>
       <img *ngIf="imagemUrl" [src]="imagemUrl" alt="Imagem do produto" class="img-thumbnail" style="max-height: 200px;" />
     </div>

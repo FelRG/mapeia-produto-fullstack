@@ -19,35 +19,40 @@ export class MapaProdutosDescricaoComponent implements OnInit {
   estabelecimento: any;
   usuario: any;
 
+  imagemUrl?: string;
+
   constructor(
     private route: ActivatedRoute,
     private associacoesService: AssociacoesService,
     private produtosService: ProdutosService,
     private estabelecimentosService: EstabelecimentosService,
     private usuariosService: UsuariosService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-  this.idAssociacao = Number(this.route.snapshot.paramMap.get('id'));
+    this.idAssociacao = Number(this.route.snapshot.paramMap.get('id'));
 
-  this.associacoesService.getAssociacaoById(this.idAssociacao).subscribe(associacao => {
-    if (!associacao || !associacao.produtoId || !associacao.estabelecimentoId || !associacao.usuarioId) {
-      alert('Dados incompletos na associação.');
-      return;
-    }
+    this.associacoesService.getAssociacaoById(this.idAssociacao).subscribe(associacao => {
+      if (!associacao || !associacao.produtoId || !associacao.estabelecimentoId || !associacao.usuarioId) {
+        alert('Dados incompletos na associação.');
+        return;
+      }
 
-    const { produtoId, estabelecimentoId, usuarioId } = associacao;
+      const { produtoId, estabelecimentoId, usuarioId } = associacao;
 
-    forkJoin({
-      produto: this.produtosService.getProdutoById(produtoId),
-      estabelecimento: this.estabelecimentosService.getEstabelecimentoById(estabelecimentoId),
-      usuario: this.usuariosService.getUsuarioById(usuarioId)
-    }).subscribe(({ produto, estabelecimento, usuario }) => {
-      this.produto = produto;
-      this.estabelecimento = estabelecimento;
-      this.usuario = usuario;
+      forkJoin({
+        produto: this.produtosService.getProdutoById(produtoId),
+        estabelecimento: this.estabelecimentosService.getEstabelecimentoById(estabelecimentoId),
+        usuario: this.usuariosService.getUsuarioById(usuarioId)
+      }).subscribe(({ produto, estabelecimento, usuario }) => {
+        this.produto = produto;
+        if (this.produto.foto) {
+          this.imagemUrl = this.produtosService.getImagemUrl(this.produto.foto);
+        }
+        this.estabelecimento = estabelecimento;
+        this.usuario = usuario;
+      });
     });
-  });
-}
+  }
 
 }
