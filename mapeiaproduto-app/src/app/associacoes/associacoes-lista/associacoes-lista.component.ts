@@ -22,6 +22,9 @@ export class AssociacoesListaComponent implements OnInit {
   q!: string;
   messagemErroBusca!: string;
 
+  isAdmin?: boolean;
+  contaAtualPermissao: string = localStorage.getItem('tipoPermissao') || '';
+
   paginaAtual: number = 1;
   tamanhoPagina: number = 5;
 
@@ -39,6 +42,7 @@ export class AssociacoesListaComponent implements OnInit {
   // }
 
   ngOnInit(): void {
+    this.isAdmin = this.contaAtualPermissao === 'Admin';
     forkJoin({
       associacoes: this.service.getAssociacoes(),
       produtos: this.produtosService.getProdutos(),

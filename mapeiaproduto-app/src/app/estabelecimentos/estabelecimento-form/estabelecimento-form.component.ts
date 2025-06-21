@@ -17,6 +17,9 @@ export class EstabelecimentoFormComponent implements OnInit {
   idUsuario: number = localStorage.getItem('id') ? parseInt(localStorage.getItem('id')!) : 0;
   id!: number;
 
+  isAdmin?: boolean;
+  contaAtualPermissao: string = localStorage.getItem('tipoPermissao') || '';
+
   cidades: string[] = [
     'Agudo', 'Cacequi', 'Cachoeira do Sul', 'Capão do Cipó', 'Cerro Branco',
     'Dilermando de Aguiar', 'Dona Francisca', 'Faxinal do Soturno', 'Itaara', 'Ivorá',
@@ -41,6 +44,7 @@ export class EstabelecimentoFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin = this.contaAtualPermissao === 'Admin';
     this.activatedRoute.params.subscribe(params => {
       if (params && params['id']) {
         this.id = params['id'];

@@ -3,6 +3,7 @@ package br.csi.mapeia_produto_sistema.service;
 import br.csi.mapeia_produto_sistema.dto.EstabelecimentoDTO;
 import br.csi.mapeia_produto_sistema.model.Estabelecimento;
 import br.csi.mapeia_produto_sistema.model.Usuario;
+import br.csi.mapeia_produto_sistema.repository.AssociacaoRepository;
 import br.csi.mapeia_produto_sistema.repository.EstabelecimentoRepository;
 import br.csi.mapeia_produto_sistema.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,10 +17,12 @@ public class EstabelecimentoService {
 
     private final EstabelecimentoRepository repository;
     private final UsuarioRepository usuarioRepository;
+    private final AssociacaoRepository associacaoRepository;
 
-    public EstabelecimentoService(EstabelecimentoRepository repository, UsuarioRepository usuarioRepository) {
+    public EstabelecimentoService(EstabelecimentoRepository repository, UsuarioRepository usuarioRepository, AssociacaoRepository associacaoRepository) {
         this.repository = repository;
         this.usuarioRepository = usuarioRepository;
+        this.associacaoRepository = associacaoRepository;
     }
 
     // Criar ou atualizar com DTO
@@ -81,6 +84,12 @@ public class EstabelecimentoService {
 
     // Deletar por ID
     public void deletarEstabelecimento(Long id) {
+        boolean temAssociacoes = associacaoRepository.existsByEstabelecimentoId(id);
+
+        if (temAssociacoes) {
+            throw new IllegalStateException("Este estabelecimento possui associações e não pode ser excluído.");
+        }
+
         if (!repository.existsById(id)) {
             throw new EntityNotFoundException("Estabelecimento não encontrado com ID: " + id);
         }

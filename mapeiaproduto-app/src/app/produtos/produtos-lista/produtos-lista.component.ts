@@ -18,6 +18,9 @@ export class ProdutosListaComponent implements OnInit {
   q!: string;
   messagemErroBusca!: string;
 
+  isAdmin?: boolean;
+  contaAtualPermissao: string = localStorage.getItem('tipoPermissao') || '';
+
   paginaAtual: number = 1;
   tamanhoPagina: number = 5;
 
@@ -26,6 +29,7 @@ export class ProdutosListaComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+    this.isAdmin = this.contaAtualPermissao === 'Admin';
     this.service.getProdutos().subscribe(resposta => this.produtos = resposta);
   }
 
@@ -37,15 +41,31 @@ export class ProdutosListaComponent implements OnInit {
     this.produtoSelecionado = produto;
   }
 
+  // deletarProduto() {
+  //   console.log(this.produtoSelecionado);
+  //   this.service.deletar(this.produtoSelecionado).subscribe(
+  //     response => {
+  //       this.mensagemSucesso = 'Produto deletado com sucesso!';
+  //       this.ngOnInit();
+  //     },
+  //     erro => this.mensagemErro = 'Ocorreu um erro ao deletar o produto.'
+  //   );
+  // }
+
   deletarProduto() {
-    console.log(this.produtoSelecionado);
-    this.service.deletar(this.produtoSelecionado).subscribe(
-      response => {
+    this.service.deletar(this.produtoSelecionado).subscribe({
+      next: () => {
         this.mensagemSucesso = 'Produto deletado com sucesso!';
         this.ngOnInit();
       },
-      erro => this.mensagemErro = 'Ocorreu um erro ao deletar o produto.'
-    );
+      error: (erro) => {
+                if (erro.error && typeof erro.error === 'string') {
+          this.mensagemErro = erro.error; // ← Mensagem do backend, ex: "Este produto possui associações..."
+        } else {
+          this.mensagemErro = 'Erro ao deletar o produto.';
+        }
+      }
+    });
   }
 
   consultar() {

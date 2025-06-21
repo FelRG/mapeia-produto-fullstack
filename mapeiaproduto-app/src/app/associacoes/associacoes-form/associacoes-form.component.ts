@@ -24,6 +24,9 @@ export class AssociacoesFormComponent implements OnInit {
   produtos: Produto[] = [];
   idUsuario: number = localStorage.getItem('id') ? parseInt(localStorage.getItem('id')!) : 0;
 
+  isAdmin?: boolean;
+  contaAtualPermissao: string = localStorage.getItem('tipoPermissao') || '';
+
   // Variáveis para controle de estado do formulário
   sucesso!: boolean;
   erro!: boolean;
@@ -63,6 +66,7 @@ export class AssociacoesFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin = this.contaAtualPermissao === 'Admin';
     // this.estabelecimentosService.getEstabelecimentos().subscribe(response => {
     //   this.estabelecimentos = response;
     // });

@@ -35,16 +35,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/uploads/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/login", "/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
-//                                .requestMatchers(HttpMethod.GET,
-//                                        "/produto/buscar",
-//                                        "/produto/**",
-//                                        "/estabelecimento/{id}",
-//                                        "/estabelecimento/buscar",
-//                                        "/estabelecimento**",
-//                                        "/associacao/produto/**",
-//                                        "/associacao/{id}"
-//                                ).permitAll()
-//                                .requestMatchers(HttpMethod.GET,"/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
                                 .requestMatchers(HttpMethod.GET,
                                         "/usuario",
                                         "/usuario/{id}",
@@ -60,14 +50,26 @@ public class SecurityConfig {
                                         "/associacao/produto/**",
                                         "/associacao/{id}"
                                 ).permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
+//                                .requestMatchers(HttpMethod.GET,
+//                                        "/produto/buscar",
+//                                        "/produto/**",
+//                                        "/estabelecimento/{id}",
+//                                        "/estabelecimento/buscar",
+//                                        "/estabelecimento**",
+//                                        "/associacao/produto/**",
+//                                        "/associacao/{id}"
+//                                ).permitAll()
+//                                .requestMatchers(HttpMethod.GET,"/usuario", "/produto", "/estabelecimento", "/associacao").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/usuario").hasAnyAuthority("Admin", "Produtor", "Consumidor")
 //                                .requestMatchers(HttpMethod.GET, "/produto").hasAnyAuthority("Admin", "Produtor", "Consumidor")
 //                                .requestMatchers(HttpMethod.GET, "/estabelecimento").hasAnyAuthority("Admin", "Produtor", "Consumidor")
 //                                .requestMatchers(HttpMethod.GET, "/associacao").hasAnyAuthority("Admin", "Produtor", "Consumidor")
-                                .requestMatchers(HttpMethod.PUT, "/usuario").hasAnyAuthority("Admin", "Produtor", "Consumidor")
-                                .requestMatchers(HttpMethod.PUT, "/produto").hasAnyAuthority("Admin", "Produtor", "Consumidor")
-                                .requestMatchers(HttpMethod.PUT, "/estabelecimento").hasAnyAuthority("Admin", "Produtor", "Consumidor")
-                                .requestMatchers(HttpMethod.PUT, "/associacao").hasAnyAuthority("Admin", "Produtor", "Consumidor")
+//                                .requestMatchers(HttpMethod.PUT, "/usuario").hasAnyAuthority("Admin", "Produtor", "Consumidor")
+//                                .requestMatchers(HttpMethod.PUT, "/produto").hasAnyAuthority("Admin", "Produtor", "Consumidor")
+//                                .requestMatchers(HttpMethod.PUT, "/estabelecimento").hasAnyAuthority("Admin", "Produtor", "Consumidor")
+//                                .requestMatchers(HttpMethod.PUT, "/associacao").hasAnyAuthority("Admin", "Produtor", "Consumidor")
                                 .anyRequest().authenticated())
                 .addFilterBefore(this.autenticaoFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

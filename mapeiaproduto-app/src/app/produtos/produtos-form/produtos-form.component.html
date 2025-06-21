@@ -1,5 +1,5 @@
 <br />
-<ol class="breadcrumb mb-4">
+<!-- <ol class="breadcrumb mb-4">
   <li class="breadcrumb-item active">
     Produto &gt;
     {{
@@ -7,7 +7,20 @@
     }}
     Produto
   </li>
+</ol> -->
+
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">
+    Produto &gt;
+    {{
+      produto.id
+        ? (isAdmin ? 'Editar' : 'Visualizar')
+        : 'Cadastrar'
+    }}
+    Produto
+  </li>
 </ol>
+
 
 <div class="container pb-4">
   <form #produtoForm="ngForm" (ngSubmit)="onSubmit()">
@@ -68,7 +81,7 @@
     </div> -->
 
     <!-- Upload de imagem -->
-    <div class="mb-3">
+    <div *ngIf="isAdmin" class="mb-3">
       <label for="foto" class="form-label">Foto do Produto *Tamanho máximo: 20MB</label>
       <input type="file" id="foto" class="form-control rounded-pill border border-dark"
         (change)="onFileSelected($event)" accept="image/*" />
@@ -79,14 +92,14 @@
     <div class="mb-3">
       <label for="nomeProduto" class="form-label">Nome do produto</label>
       <input type="text" id="nomeProduto" name="nomeProduto" class="form-control rounded-pill border border-dark"
-        placeholder="Digite o nome do produto. Ex: Feijão Branco" [(ngModel)]="produto.nomeProduto" />
+        placeholder="Digite o nome do produto. Ex: Feijão Branco" [(ngModel)]="produto.nomeProduto" [disabled]="!isAdmin"/>
     </div>
 
     <!-- Marca -->
     <div class="mb-3">
       <label for="marca" class="form-label">Marca</label>
       <input type="text" id="marca" name="marca" class="form-control rounded-pill border border-dark"
-        placeholder="Digite a marca. Ex: Camil" [(ngModel)]="produto.marca" />
+        placeholder="Digite a marca. Ex: Camil" [(ngModel)]="produto.marca" [disabled]="!isAdmin" />
     </div>
 
     <!-- Município de Origem -->
@@ -94,18 +107,18 @@
       <label for="municipioOrigem" class="form-label">Município de Origem</label>
       <input type="text" id="municipioOrigem" name="municipioOrigem"
         class="form-control rounded-pill border border-dark" placeholder="Digite o município de origem. Ex: Santa Maria"
-        [(ngModel)]="produto.municipioOrigem" />
+        [(ngModel)]="produto.municipioOrigem" [disabled]="!isAdmin" />
     </div>
 
     <!-- Fabricante -->
     <div class="mb-3">
       <label for="fabricante" class="form-label">Fabricante</label>
       <input type="text" id="fabricante" name="fabricante" class="form-control rounded-pill border border-dark"
-        placeholder="Digite o fabricante. Ex: Bandeirantes Ltda" [(ngModel)]="produto.fabricante" />
+        placeholder="Digite o fabricante. Ex: Bandeirantes Ltda" [(ngModel)]="produto.fabricante" [disabled]="!isAdmin" />
     </div>
 
     <!-- Está ativo? -->
-    <div class="mb-3" *ngIf="produto.id">
+    <div class="mb-3" *ngIf="produto.id && isAdmin">
       <label class="form-label d-block mb-2">Está ativo?</label>
 
       <div class="form-check form-check-inline">
@@ -130,7 +143,7 @@
       <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="!produto.id">
         Cadastrar Produto
       </button>
-      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="produto.id">
+      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="produto.id && isAdmin">
         Atualizar Dados
       </button>
     </div>

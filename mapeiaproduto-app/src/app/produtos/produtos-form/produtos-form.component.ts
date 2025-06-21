@@ -23,8 +23,10 @@ export class ProdutosFormComponent implements OnInit {
   erroUsuarioInvalido: boolean = false;
   idUsuario: number = localStorage.getItem('id') ? parseInt(localStorage.getItem('id')!) : 0;
 
-  selectedFile?: File;
+  isAdmin?: boolean;
+  contaAtualPermissao: string = localStorage.getItem('tipoPermissao') || '';
 
+  selectedFile?: File;
   imagemUrl?: string;
 
 
@@ -40,6 +42,7 @@ export class ProdutosFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin = this.contaAtualPermissao === 'Admin';
     // this.usuarioService.getUsuarioById(1).subscribe( response => this.usuario = response)
     this.activatedRoute.params.subscribe((params) => {
       if (params && params['id']) {

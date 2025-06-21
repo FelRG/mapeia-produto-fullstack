@@ -19,4 +19,6 @@ public interface AssociacaoRepository extends JpaRepository<Associacao, Long> {
        OR LOWER(p.nomeProduto) LIKE LOWER(CONCAT('%', :nome, '%'))
     """)
     List<Associacao> buscarPorNomeEstabelecimentoOuProduto(@Param("nome") String nome);
+    boolean existsByEstabelecimentoId(Long idEstabelecimento);
+    boolean existsByProdutoId(Long id);
 }

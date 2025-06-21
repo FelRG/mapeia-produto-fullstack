@@ -6,6 +6,7 @@ import br.csi.mapeia_produto_sistema.model.Produto;
 import br.csi.mapeia_produto_sistema.model.Usuario;
 import br.csi.mapeia_produto_sistema.service.ProdutoService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,8 +91,12 @@ public class ProdutoController {
         try {
             produtoService.deletarProduto(id);
             return ResponseEntity.noContent().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro inesperado ao excluir produto.");
         }
     }
 

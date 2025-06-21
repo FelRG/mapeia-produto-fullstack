@@ -3,7 +3,9 @@
   <li class="breadcrumb-item active">
     Estabelecimento &gt;
     {{
-    estabelecimento.id ? "Editar" : "Cadastrar"
+    estabelecimento.id
+        ? (isAdmin ? 'Editar' : 'Visualizar')
+        : 'Cadastrar'
     }}
     Estabelecimento
   </li>
@@ -41,7 +43,7 @@
       <label for="nome" class="form-label">Nome do estabelecimento</label>
       <input type="text" id="nome" name="nome" class="form-control rounded-pill border border-dark"
         placeholder="Digite o nome do estabelecimento. Ex: Queijaria do Sul"
-        [(ngModel)]="estabelecimento.nomeEstabelecimento" />
+        [(ngModel)]="estabelecimento.nomeEstabelecimento" [disabled]="!isAdmin" />
     </div>
 
     <!-- Categoria do Local -->
@@ -49,28 +51,28 @@
       <label for="categoria" class="form-label">Categoria do local</label>
       <input type="text" id="categoria" name="categoria" class="form-control rounded-pill border border-dark"
         placeholder="Digite a categoria do local. Ex: Comércio de Frutas e Legumes"
-        [(ngModel)]="estabelecimento.categoria" />
+        [(ngModel)]="estabelecimento.categoria" [disabled]="!isAdmin"/>
     </div>
 
     <!-- Endereço -->
     <div class="mb-3">
       <label for="endereco" class="form-label">Endereço</label>
       <input type="text" id="endereco" name="endereco" class="form-control rounded-pill border border-dark"
-        placeholder="Digite o endereço. Ex: Rua dos Almirantes" [(ngModel)]="estabelecimento.endereco" />
+        placeholder="Digite o endereço. Ex: Rua dos Almirantes" [(ngModel)]="estabelecimento.endereco" [disabled]="!isAdmin" />
     </div>
 
     <!-- Número -->
     <div class="mb-3">
       <label for="numero" class="form-label">Número</label>
       <input type="text" id="numero" name="numero" class="form-control rounded-pill border border-dark"
-        placeholder="Digite o número. Ex: 1669" [(ngModel)]="estabelecimento.numero" />
+        placeholder="Digite o número. Ex: 1669" [(ngModel)]="estabelecimento.numero" [disabled]="!isAdmin"/>
     </div>
 
     <!-- Estado -->
     <div class="mb-3">
       <label for="estado" class="form-label">Estado</label>
       <select id="estado" name="estado" class="form-select rounded-pill border border-dark"
-        [(ngModel)]="estabelecimento.estado">
+        [(ngModel)]="estabelecimento.estado" [disabled]="!isAdmin">
         <option value="" disabled>Selecione o estado</option>
         <option value="RS">RS</option>
         <!-- Adicione mais estados conforme necessário -->
@@ -82,7 +84,7 @@
     <div class="mb-3">
       <label for="cidade" class="form-label">Cidade</label>
       <select id="cidade" name="cidade" class="form-select rounded-pill border border-dark"
-        [(ngModel)]="estabelecimento.cidade">
+        [(ngModel)]="estabelecimento.cidade" [disabled]="!isAdmin">
         <option value="" disabled selected>Selecione a cidade...</option>
         <option *ngFor="let cidade of cidades" [value]="cidade">
           {{ cidade }}
@@ -95,11 +97,11 @@
     <div class="mb-3">
       <label for="complemento" class="form-label">Complemento</label>
       <input type="text" id="complemento" name="complemento" class="form-control rounded-pill border border-dark"
-        placeholder="Digite o complemento. Ex: Casa, Apartamento, Loja" [(ngModel)]="estabelecimento.complemento" />
+        placeholder="Digite o complemento. Ex: Casa, Apartamento, Loja" [(ngModel)]="estabelecimento.complemento" [disabled]="!isAdmin" />
     </div>
 
-     <!-- Está ativo? -->
-    <div class="mb-3" *ngIf="estabelecimento.id">
+    <!-- Está ativo? -->
+    <div class="mb-3" *ngIf="estabelecimento.id && isAdmin">
       <label class="form-label d-block mb-2">Está ativo?</label>
 
       <div class="form-check form-check-inline">
@@ -124,7 +126,7 @@
       <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="!estabelecimento.id">
         Cadastrar Estabelecimento
       </button>
-      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="estabelecimento.id">
+      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="estabelecimento.id && isAdmin">
         Atualizar Dados
       </button>
     </div>

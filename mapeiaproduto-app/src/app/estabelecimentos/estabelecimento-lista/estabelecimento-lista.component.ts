@@ -17,6 +17,9 @@ export class EstabelecimentoListaComponent implements OnInit {
   q!: string;
   messagemErroBusca!: string;
 
+  isAdmin?: boolean;
+  contaAtualPermissao: string = localStorage.getItem('tipoPermissao') || '';
+
   paginaAtual: number = 1;
   tamanhoPagina: number = 5;
 
@@ -26,6 +29,7 @@ export class EstabelecimentoListaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isAdmin = this.contaAtualPermissao === 'Admin';
     this.service.getEstabelecimentos().subscribe(resposta => this.estabelecimentos = resposta);
   }
 
@@ -37,15 +41,37 @@ export class EstabelecimentoListaComponent implements OnInit {
     this.estabelecimentoSelecionado = estabelecimento;
   }
 
+  // deletarEstabelecimento() {
+  //   this.service.deletar(this.estabelecimentoSelecionado).subscribe(
+  //     response => {
+  //       this.mensagemSucesso = 'Estabelecimento deletado com sucesso!';
+  //       this.ngOnInit();
+  //     },
+  //     erro => { 
+  //       this.mensagemErro = 'Erro ao deletar o estabelecimento.' 
+  //     }
+  //   );
+  // }
+
   deletarEstabelecimento() {
-    this.service.deletar(this.estabelecimentoSelecionado).subscribe(
-      response => {
-        this.mensagemSucesso = 'Estabelecimento deletado com sucesso!';
+    this.service.deletar(this.estabelecimentoSelecionado).subscribe({
+      next: () => {
+        this.mensagemSucesso = 'Estabelecimento excluído com sucesso.';
         this.ngOnInit();
       },
-      erro => this.mensagemErro = 'Erro ao deletar o estabelecimento.'
-    );
+      error: (erro) => {
+        // this.mensagemErro = 'Erro ao deletar o estabelecimento.'
+        // this.mensagemErro = erro.error; // A mensagem do backend será exibida
+        // Verifica se veio uma mensagem personalizada do backend
+        if (erro.error && typeof erro.error === 'string') {
+          this.mensagemErro = erro.error; // ← Mensagem do backend, ex: "Este estabelecimento possui associações..."
+        } else {
+          this.mensagemErro = 'Erro ao deletar o estabelecimento.';
+        }
+      }
+    });
   }
+
 
   consultar() {
     if (!this.q || this.q.trim() === '') {

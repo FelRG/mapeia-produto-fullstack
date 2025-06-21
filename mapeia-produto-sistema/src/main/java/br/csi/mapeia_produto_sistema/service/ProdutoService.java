@@ -2,6 +2,7 @@ package br.csi.mapeia_produto_sistema.service;
 
 import br.csi.mapeia_produto_sistema.dto.ProdutoDTO;
 import br.csi.mapeia_produto_sistema.model.Produto;
+import br.csi.mapeia_produto_sistema.repository.AssociacaoRepository;
 import br.csi.mapeia_produto_sistema.repository.ProdutoRepository;
 import br.csi.mapeia_produto_sistema.model.Usuario;
 import br.csi.mapeia_produto_sistema.repository.UsuarioRepository;
@@ -16,10 +17,12 @@ public class ProdutoService {
 
     private final ProdutoRepository repository;
     private final UsuarioRepository usuarioRepository;
+    private final AssociacaoRepository associacaoRepository;
 
-    public ProdutoService(ProdutoRepository repository, UsuarioRepository usuarioRepository) {
+    public ProdutoService(ProdutoRepository repository, UsuarioRepository usuarioRepository, AssociacaoRepository associacaoRepository) {
         this.repository = repository;
         this.usuarioRepository = usuarioRepository;
+        this.associacaoRepository = associacaoRepository;
     }
 
     // Criar ou atualizar
@@ -118,6 +121,12 @@ public class ProdutoService {
 
     // Remover por ID
     public void deletarProduto(Long id) {
+        boolean temAssociacoes = associacaoRepository.existsByProdutoId(id);
+
+        if (temAssociacoes) {
+            throw new IllegalStateException("Este produto possui associações e não pode ser excluído.");
+        }
+
         if (!repository.existsById(id)) {
             throw new EntityNotFoundException("Produto não encontrado com id: " + id);
         }

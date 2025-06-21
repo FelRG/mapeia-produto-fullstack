@@ -30,21 +30,15 @@
   </div> -->
 
   <!-- Campo de Busca com estilo moderno e funcionalidades Angular -->
-<form #consultaForm="ngForm" (submit)="consultar()" class="mb-4">
-  <div class="d-flex">
-    <input
-      type="text"
-      [(ngModel)]="q"
-      name="q"
-      id="inputq"
-      class="form-control rounded-pill border border-dark me-2"
-      placeholder="Digite o nome do produto ou estabelecimento..."
-    />
-    <button type="submit" class="btn btn-outline-dark rounded-pill px-4 btn-search">
-      <i class="bi bi-search"></i>
-    </button>
-  </div>
-</form>
+  <form #consultaForm="ngForm" (submit)="consultar()" class="mb-4">
+    <div class="d-flex">
+      <input type="text" [(ngModel)]="q" name="q" id="inputq" class="form-control rounded-pill border border-dark me-2"
+        placeholder="Digite o nome do produto ou estabelecimento..." />
+      <button type="submit" class="btn btn-outline-dark rounded-pill px-4 btn-search">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </form>
 
   <div>
     <div class="alert alert-warning" role="alert" *ngIf="messagemErroBusca">
@@ -69,11 +63,16 @@
 
         <!-- Lado direito: Ações -->
         <div>
-          <button class="btn btn-link text-dark me-2" [routerLink]="'/associacoes/form/' + associacao.id"
+          <!-- <button class="btn btn-link text-dark me-2" [routerLink]="'/associacoes/form/' + associacao.id"
             title="Editar">
             <i class="bi bi-pencil fs-5"></i>
+          </button> -->
+          <button class="btn btn-link text-dark me-2" [routerLink]="'/associacoes/form/' + associacao.id"
+            [title]="isAdmin ? 'Editar' : 'Visualizar'">
+            <i class="fs-5" [ngClass]="isAdmin ? 'bi bi-pencil' : 'bi bi-eye'"></i>
           </button>
-          <button class="btn btn-link text-dark" (click)="preparaDelecao(associacao)" title="Excluir"
+
+          <button *ngIf="isAdmin" class="btn btn-link text-dark" (click)="preparaDelecao(associacao)" title="Excluir"
             data-bs-toggle="modal" data-bs-target="#modalDelecao">
             <i class="bi bi-trash fs-5"></i>
           </button>
@@ -83,24 +82,23 @@
   </div>
 
   <nav class="mt-3">
-  <ul class="pagination justify-content-center">
-    <li class="page-item" [class.disabled]="paginaAtual === 1">
-      <button class="page-link" (click)="paginaAtual = paginaAtual - 1" [disabled]="paginaAtual === 1">Anterior</button>
-    </li>
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="paginaAtual === 1">
+        <button class="page-link" (click)="paginaAtual = paginaAtual - 1"
+          [disabled]="paginaAtual === 1">Anterior</button>
+      </li>
 
-    <li
-      class="page-item"
-      *ngFor="let pagina of [].constructor(totalPaginas); let i = index"
-      [class.active]="paginaAtual === i + 1"
-    >
-      <button class="page-link" (click)="paginaAtual = i + 1">{{ i + 1 }}</button>
-    </li>
+      <li class="page-item" *ngFor="let pagina of [].constructor(totalPaginas); let i = index"
+        [class.active]="paginaAtual === i + 1">
+        <button class="page-link" (click)="paginaAtual = i + 1">{{ i + 1 }}</button>
+      </li>
 
-    <li class="page-item" [class.disabled]="paginaAtual === totalPaginas">
-      <button class="page-link" (click)="paginaAtual = paginaAtual + 1" [disabled]="paginaAtual === totalPaginas">Próxima</button>
-    </li>
-  </ul>
-</nav>
+      <li class="page-item" [class.disabled]="paginaAtual === totalPaginas">
+        <button class="page-link" (click)="paginaAtual = paginaAtual + 1"
+          [disabled]="paginaAtual === totalPaginas">Próxima</button>
+      </li>
+    </ul>
+  </nav>
 
 
 </div>

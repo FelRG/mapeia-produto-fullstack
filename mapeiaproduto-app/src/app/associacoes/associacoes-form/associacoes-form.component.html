@@ -3,7 +3,9 @@
   <li class="breadcrumb-item active">
     Associação &gt;
     {{
-    associacao.id ? "Editar" : "Cadastrar"
+      associacao.id 
+      ? (isAdmin ? 'Editar' : 'Visualizar')
+      : "Cadastrar"
     }}
     Associação
   </li>
@@ -147,7 +149,7 @@
 
 
     <!-- Está ativo? -->
-    <div class="mb-3" *ngIf="associacao.id">
+    <div class="mb-3" *ngIf="associacao.id && isAdmin">
       <label class="form-label d-block mb-2">Está ativo?</label>
 
       <div class="form-check form-check-inline">
@@ -172,7 +174,7 @@
       <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="!associacao.id">
         Cadastrar Associação
       </button>
-      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="associacao.id">
+      <button type="submit" class="btn btn-success px-4 rounded-pill" *ngIf="associacao.id && isAdmin">
         Atualizar Dados
       </button>
     </div>

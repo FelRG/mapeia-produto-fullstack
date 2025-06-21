@@ -18,39 +18,39 @@ export class TokenInterceptor implements HttpInterceptor {
 
     const url = request.url;
 
-    // if(tokenString && !url.endsWith('/login') ) {
-    //   const token = JSON.parse(tokenString || '{}');
-    //   const jwt = token.token;
-    //   request = request.clone({
-    //     setHeaders : {
-    //       Authorization: 'Bearer ' + jwt
-    //     }
-    //   });
-    // }
-
-    const rotasPublicas = [
-      // '/produto/buscar',
-      // '/produto',
-      // '/estabelecimento',
-      // '/associacao/produto',
-      // '/associacao'
-      '/produto',
-      '/estabelecimento',
-      'associacao',
-    ];
-
-    // Verifica se a requisição é pública
-    const isRotaPublica = rotasPublicas.some(publicUrl => url.includes(publicUrl));
-
-    if (tokenString && !url.endsWith('/login') && !isRotaPublica) {
+    if(tokenString && !url.endsWith('/login') ) {
       const token = JSON.parse(tokenString || '{}');
       const jwt = token.token;
       request = request.clone({
-        setHeaders: {
+        setHeaders : {
           Authorization: 'Bearer ' + jwt
         }
       });
     }
+
+    // const rotasPublicas = [
+    //   // '/produto/buscar',
+    //   // '/produto',
+    //   // '/estabelecimento',
+    //   // '/associacao/produto',
+    //   // '/associacao'
+    //   '/produto',
+    //   '/estabelecimento',
+    //   '/associacao',
+    // ];
+
+    // Verifica se a requisição é pública
+    // const isRotaPublica = rotasPublicas.some(publicUrl => url.includes(publicUrl));
+
+    // if (tokenString && !url.endsWith('/login') && !isRotaPublica) {
+    //   const token = JSON.parse(tokenString || '{}');
+    //   const jwt = token.token;
+    //   request = request.clone({
+    //     setHeaders: {
+    //       Authorization: 'Bearer ' + jwt
+    //     }
+    //   });
+    // }
 
 
     return next.handle(request);
