@@ -106,6 +106,10 @@ O sistema tem como propósito:
 
 ## 📊 Diagrama de Caso de Uso
 
+<p align="center">
+  <img src="images/diagramacasouso.jpg" width="700"/>
+</p>
+
 Este diagrama representa:
 
 - Interação entre Produtor/Consumidor, Admin e Usuário Externo  
@@ -117,6 +121,10 @@ Este diagrama representa:
 ---
 
 ## 🗄️ Modelo de Dados
+
+<p align="center">
+  <img src="images/fotobancodados.png" width="700"/>
+</p>
 
 ### Principais entidades:
 
